@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <!-- Tailwind CSSのCDNを追加 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="index.css">
+    <!-- three.jsを読み込む -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <!-- index.jsを読み込む -->
+    <script src="js/index.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex justify-center items-center min-h-screen">
+        <div id="main_canvas" class="w-full h-[500px] bg-white shadow-md rounded-lg overflow-hidden">
+            <canvas id="canvas" class="w-full h-full"></canvas>
+        </div>
+    </div>
+</body>
+</html>
