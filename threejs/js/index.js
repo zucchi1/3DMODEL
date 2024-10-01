@@ -10,48 +10,43 @@ function init() {
     height = document.getElementById('main_canvas').getBoundingClientRect().height;
     renderer.setPixelRatio(1);
     renderer.setSize(width, height);
-    console.log(window.devicePixelRatio);
-    console.log(width + ", " + height);
+
+    // ガンマ補正の代わりに outputEncoding を設定
+    renderer.outputEncoding = THREE.sRGBEncoding;
 
     // シーンを作成
     const scene = new THREE.Scene();
 
     // カメラを作成
     camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
-    camera.position.set(0, 0, -40);
+    camera.position.set(0, 400, -1000);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-    // Load GLTF or GLB
+    // GLTF/GLBモデルの読み込み
     const loader = new THREE.GLTFLoader();
-    const url = 'http://localhost:8080/monkey.glb';
+    const url = './glb/none.glb?' + new Date().getTime(); // キャッシュを防ぐ
+
 
     let model = null;
     loader.load(
         url,
         function (gltf) {
             model = gltf.scene;
-            // model.name = "model_with_cloth";
             model.scale.set(400.0, 400.0, 400.0);
             model.position.set(0, -400, 0);
             scene.add(gltf.scene);
-
-            // model["test"] = 100;
         },
+        undefined, // プログレスイベントの無視
         function (error) {
-            console.log('An error happened');
-            console.log(error);
+            console.error('Failed to load the model:', error);
         }
     );
-    renderer.gammaOutput = true;
-    renderer.gammaFactor = 2.2;
-
 
     // 平行光源
     const light = new THREE.DirectionalLight(0xFFFFFF);
     light.intensity = 2; // 光の強さを倍に
     light.position.set(1, 1, 1);
-    // シーンに追加
     scene.add(light);
 
     // 初回実行
