@@ -25,9 +25,9 @@ function init() {
 
     // GLTF/GLBモデルの読み込み
     const loader = new THREE.GLTFLoader();
-    const url = './glb/none.glb?' + new Date().getTime(); // キャッシュを防ぐ
-
-
+    //const url = './glb/Bauhaus.glb'; // 修正済みパス
+    const url = './glb/Bauhaus.glb?' + new Date().getTime(); // GLBフォルダ内の正しいファイル名を指定
+ 
     let model = null;
     loader.load(
         url,
@@ -37,11 +37,14 @@ function init() {
             model.position.set(0, -400, 0);
             scene.add(gltf.scene);
         },
-        undefined, // プログレスイベントの無視
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
         function (error) {
-            console.error('Failed to load the model:', error);
+            console.error('An error happened:', error);
         }
     );
+    
 
     // 平行光源
     const light = new THREE.DirectionalLight(0xFFFFFF);
