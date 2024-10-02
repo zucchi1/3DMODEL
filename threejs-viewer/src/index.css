@@ -1,0 +1,30 @@
+/* 全要素のボックスサイズをボーダーボックスに設定 */
+* {
+  box-sizing: border-box;
+}
+
+/* bodyとhtmlの高さを100%に設定 */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 背景色を設定し、ページ全体の高さを確保 */
+body {
+  background-color: #f7fafc; /* Tailwindの bg-gray-100 */
+}
+
+/* Canvasとその親要素のサイズをフルスクリーンに設定 */
+#main_canvas {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
