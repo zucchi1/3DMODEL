@@ -1,0 +1,41 @@
+{
+  "name": "threejs-viewer", // プロジェクトの名前
+  "version": "0.1.0",       // プロジェクトのバージョン
+  "private": true,          // プライベートプロジェクトとして設定（npmに公開しない）
+  "dependencies": {         // 本番環境で必要な依存関係
+    "@react-three/drei": "^9.114.0", // Three.jsを使いやすくするためのヘルパーライブラリ
+    "@react-three/fiber": "^8.17.9", // ReactとThree.jsを統合するためのライブラリ
+    "@testing-library/jest-dom": "^5.17.0", // Jestの拡張ライブラリ
+    "@testing-library/react": "^13.4.0", // Reactコンポーネントのテスト用ライブラリ
+    "@testing-library/user-event": "^13.5.0", // ユーザーイベントシミュレーション用ライブラリ
+    "react": "^18.3.1",       // Reactのライブラリ
+    "react-dom": "^18.3.1",   // ReactコンポーネントをDOMにマウントするためのライブラリ
+    "react-scripts": "5.0.1", // Create React Appのスクリプト
+    "three": "^0.169.0",      // Three.jsのライブラリ
+    "web-vitals": "^2.1.4"    // Webパフォーマンス測定のためのライブラリ
+  },
+  "scripts": {                // スクリプトコマンドの定義
+    "start": "react-scripts start", // 開発サーバーの起動
+    "build": "react-scripts build", // 本番環境用のビルド
+    "test": "react-scripts test",   // テストの実行
+    "eject": "react-scripts eject"   // 設定を「eject」する（カスタマイズ）
+  },
+  "eslintConfig": {           // ESLintの設定
+    "extends": [
+      "react-app",             // Create React AppのESLint設定
+      "react-app/jest"         // JestテストのESLint設定
+    ]
+  },
+  "browserslist": {           // 対応ブラウザの設定
+    "production": [
+      ">0.2%",                 // 市場シェアが0.2%以上のブラウザ
+      "not dead",              // サポートが終了していないブラウザ
+      "not op_mini all"       // Opera Mini以外
+    ],
+    "development": [
+      "last 1 chrome version", // 最新のChromeバージョン
+      "last 1 firefox version", // 最新のFirefoxバージョン
+      "last 1 safari version"   // 最新のSafariバージョン
+    ]
+  }
+}
