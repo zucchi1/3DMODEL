@@ -1,6 +1,7 @@
 import React from 'react';
 import CanvasScene from './CanvasScene';  // 3Dシーンのコンポーネント
 import DownloadButton from './DownloadButton';  // ダウンロードボタンのコンポーネント
+import './index.css';
 
 function App() {
   return (

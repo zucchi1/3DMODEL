@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 /* 全要素のボックスサイズをボーダーボックスに設定 */
 * {
   box-sizing: border-box;
