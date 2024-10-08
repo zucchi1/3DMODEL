@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css'; // CSSの読み込み
-import App from './App'; // メインのAppコンポーネントをインポート
+import './css/index.css';  // 修正されたCSSパス
+import App from './App';  // メインアプリケーション
+import Home from './components/Home';  // HOME画面
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// ReactのルートDOMに対してAppコンポーネントをレンダリング
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// Reactアプリケーションをレンダリング
 root.render(
   <React.StrictMode>
-    <App /> {/* Appコンポーネントをルートとして描画 */}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />  {/* HOME画面 */}
+        <Route path="/viewer" element={<App />} />  {/* 3Dモデル描画画面 */}
+      </Routes>
+    </Router>
   </React.StrictMode>
 );
