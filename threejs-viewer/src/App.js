@@ -1,7 +1,7 @@
 import React from 'react';
-import CanvasScene from './CanvasScene';  // 3Dシーンのコンポーネント
-import DownloadButton from './DownloadButton';  // ダウンロードボタンのコンポーネント
-import './index.css';
+import CanvasScene from './components/CanvasScene';  // 3Dシーンコンポーネント
+import DownloadButton from './components/DownloadButton';  // ダウンロードボタンコンポーネント
+import './css/index.css';  // グローバルCSSのインポート
 
 function App() {
   return (
