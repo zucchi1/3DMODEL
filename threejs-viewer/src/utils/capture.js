@@ -1,9 +1,13 @@
-// 画面キャプチャ機能をエクスポート
 export default function captureScreen(renderer, scene, camera) {
-  renderer.render(scene, camera); // レンダリングしてからキャプチャ
-  const canvas = renderer.domElement; // Three.jsのcanvas要素を取得
-  const link = document.createElement('a'); // ダウンロード用リンクを生成
-  link.download = 'canvas_image.png'; // ダウンロードファイル名
-  link.href = canvas.toDataURL('image/png'); // Canvasの内容をPNG形式でエンコード
-  link.click(); // 自動的にリンクをクリックして画像をダウンロード
+  // 現在のシーンをレンダリング
+  renderer.render(scene, camera);
+
+  // レンダリングされたcanvasを取得
+  const canvas = renderer.domElement;
+
+  // Canvasの内容をPNG画像として取得
+  const link = document.createElement('a');
+  link.download = 'canvas_image.png';  // ダウンロードするファイル名
+  link.href = canvas.toDataURL('image/png');  // canvasの内容をPNGデータURLとして取得
+  link.click();  // 自動的にリンクをクリックしてダウンロード
 }
