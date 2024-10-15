@@ -1,16 +1,41 @@
-import React from 'react';
-import CanvasScene from './components/CanvasScene';  // 3Dシーンコンポーネント
-import DownloadButton from './components/DownloadButton';  // ダウンロードボタンコンポーネント
-import './css/index.css';  // グローバルCSSのインポート
+import React, { useState } from 'react';
+import Home from './components/Home';
+import ModelViewer from './components/ModelViewer';
 
 function App() {
+  const [showModels, setShowModels] = useState(false);
+
+  const handleNextClick = () => {
+    setShowModels(true);  // モデル表示画面に遷移
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      {/* 3Dモデル表示用のCanvasシーン */}
-      <div className="w-full h-[500px] bg-white shadow-md rounded-lg overflow-hidden relative">
-        <CanvasScene />  {/* Three.jsの3Dシーン */}
-        <DownloadButton />  {/* 画面キャプチャボタン */}
-      </div>
+    <div className="App">
+      {!showModels ? (
+        <Home onNextClick={handleNextClick} />
+      ) : (
+        <div className="flex justify-around mt-10">
+          {/* 左側のモデル（monkeyTrue.glb） */}
+          <div className="w-1/2 flex flex-col items-center">
+            <h2 className="text-xl mb-2">左</h2>
+            <ModelViewer 
+              glbPath="./glb/monkeyTrue.glb" 
+              imagePath="./drawing/monkeyTrue.png" 
+              caption="左" 
+            />
+          </div>
+
+          {/* 右側のモデル（monkeyFalse.glb） */}
+          <div className="w-1/2 flex flex-col items-center">
+            <h2 className="text-xl mb-2">右</h2>
+            <ModelViewer 
+              glbPath="./glb/monkeyFalse.glb" 
+              imagePath="./drawing/monkeyFalse.png" 
+              caption="右" 
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
