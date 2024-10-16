@@ -12,6 +12,7 @@ function App() {
   return (
     <div className="App">
       {!showModels ? (
+        // HomeコンポーネントにonNextClickを渡す
         <Home onNextClick={handleNextClick} />
       ) : (
         <div className="flex justify-around mt-10">
