@@ -1,70 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, SRGBColorSpace } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import DownloadButton from './DownloadButton';
+import React, { useState } from 'react';
+import { useThreeRenderer } from './rendering/ThreeRenderer';
+import DownloadButton from './buttons/DownloadButton';
+import ToggleButton from './buttons/ToggleButton';
 
-function ModelViewer({ glbPath, caption }) {
-  const [renderer, setRenderer] = useState(null);
-  const [scene, setScene] = useState(null);
-  const [camera, setCamera] = useState(null);
-  const [isRendererReady, setIsRendererReady] = useState(false);
-
-  useEffect(() => {
-    const canvas = document.querySelector(`#canvas-${caption}`);
-    if (!canvas) {
-      console.error("Canvas element not found");
-      return;
-    }
-
-    const rendererInstance = new WebGLRenderer({ canvas });
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    rendererInstance.setSize(width, height);
-    rendererInstance.outputColorSpace = SRGBColorSpace;
-
-    const sceneInstance = new Scene();
-    const cameraInstance = new PerspectiveCamera(45, width / height, 1, 10000);
-    cameraInstance.position.set(0, 400, -1000);
-
-    const controls = new OrbitControls(cameraInstance, rendererInstance.domElement);
-    const loader = new GLTFLoader();
-
-    loader.load(glbPath, (gltf) => {
-      const model = gltf.scene;
-      model.scale.set(400.0, 400.0, 400.0);
-      model.position.set(0, -400, 0);
-      sceneInstance.add(model);
-
-      setIsRendererReady(true);  // モデルのロードが完了したらレンダラーを表示
-    });
-
-    const light = new DirectionalLight(0xffffff);
-    light.position.set(1, 1, 1);
-    sceneInstance.add(light);
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      controls.update();
-      rendererInstance.render(sceneInstance, cameraInstance);
-    };
-    animate();
-
-    setRenderer(rendererInstance);
-    setScene(sceneInstance);
-    setCamera(cameraInstance);
-
-    return () => {
-      rendererInstance.dispose();
-    };
-  }, [glbPath, caption]);
+function ModelViewer({ glbPath, imagePath, caption }) {
+  const [isModelVisible, setIsModelVisible] = useState(true);
+  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, `canvas-${caption}`);
 
   return (
     <div className="relative">
-      <canvas id={`canvas-${caption}`} className="w-full h-96"></canvas>
-      {isRendererReady && renderer && scene && camera && (
-        <DownloadButton renderer={renderer} scene={scene} camera={camera} />
+      {isModelVisible ? (
+        <>
+          <canvas id={`canvas-${caption}`} className="w-full h-96"></canvas>
+        </>
+      ) : (
+        <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-96 object-contain" />
       )}
+
+      {/* ボタンをフレックスボックスで水平に並べる */}
+      <div className="flex justify-center space-x-4 mt-4">
+        <ToggleButton 
+          isModelVisible={isModelVisible} 
+          setIsModelVisible={setIsModelVisible} 
+        />
+        {/* モデルが表示されている時だけダウンロードボタンを表示 */}
+        {isModelVisible && isRendererReady && (
+          <DownloadButton renderer={renderer} scene={scene} camera={camera} />
+        )}
+      </div>
     </div>
   );
 }
