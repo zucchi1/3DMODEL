@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import Home from './components/Home';
 import ModelViewer from './components/ModelViewer';
+import App2Home from './components/buttons/app2Home';
 
 function App() {
-  const [showModels, setShowModels] = useState(false);
 
-  const handleNextClick = () => {
-    setShowModels(true);  // モデル表示画面に遷移
-  };
+
 
   return (
     <div className="App">
-      {!showModels ? (
-        // HomeコンポーネントにonNextClickを渡す
-        <Home onNextClick={handleNextClick} />
-      ) : (
+      <h1 className="text-xl mb-5 underline decoration-solid">
+        比較画面
+      </h1>
         <div className="flex justify-around mt-10">
           {/* 左側のモデル（monkeyTrue.glb） */}
           <div className="w-1/2 flex flex-col items-center">
@@ -36,7 +33,9 @@ function App() {
             />
           </div>
         </div>
-      )}
+        <div className="flex justify-center">
+          <App2Home/>
+        </div>
     </div>
   );
 }
