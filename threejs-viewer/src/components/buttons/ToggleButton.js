@@ -3,6 +3,8 @@ import React from 'react';
 function ToggleButton({ isModelVisible, setIsModelVisible }) {
   const handleClick = () => {
     setIsModelVisible(prev => !prev);
+    console.log("toggle was pushed");
+    console.log(isModelVisible);
   };
 
   return (

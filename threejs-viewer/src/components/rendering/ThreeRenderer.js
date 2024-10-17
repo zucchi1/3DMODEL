@@ -3,14 +3,17 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useEffect, useState } from 'react';
 
-// Three.jsのレンダリングロジックを分離したコンポーネント
-export function useThreeRenderer(glbPath, canvasId) {
+export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
   const [isRendererReady, setIsRendererReady] = useState(false);
 
   useEffect(() => {
+    if (!isModelVisible) {
+      return;  // モデルが表示されていない場合、何もしない
+    }
+
     const canvas = document.querySelector(`#${canvasId}`);
     if (!canvas) {
       console.error("Canvas element not found");
@@ -55,9 +58,9 @@ export function useThreeRenderer(glbPath, canvasId) {
     setCamera(cameraInstance);
 
     return () => {
-      rendererInstance.dispose();
+      rendererInstance.dispose();  // クリーンアップ
     };
-  }, [glbPath, canvasId]);
+  }, [glbPath, canvasId, isModelVisible]);
 
   return { renderer, scene, camera, isRendererReady };
 }
