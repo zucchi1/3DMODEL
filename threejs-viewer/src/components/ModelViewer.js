@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useThreeRenderer } from './rendering/ThreeRenderer';
 import DownloadButton from './buttons/DownloadButton';
 import ToggleButton from './buttons/ToggleButton';
 
 function ModelViewer({ glbPath, imagePath, caption }) {
   const [isModelVisible, setIsModelVisible] = useState(true);
-  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, `canvas-${caption}`);
+  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible);  // isModelVisibleを依存関係に追加
+
+  useEffect(() => {
+    if (!isModelVisible && renderer) {
+      // 3Dモデルが表示されていない時、レンダラーを停止してメモリリークを防ぐ
+      renderer.dispose();
+    }
+  }, [isModelVisible, renderer]);
 
   return (
     <div className="relative">
       {isModelVisible ? (
-        <>
-          <canvas id={`canvas-${caption}`} className="w-full h-96"></canvas>
-        </>
+        <canvas id={`canvas-${caption}`} className="w-full h-96"></canvas>
       ) : (
         <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-96 object-contain" />
       )}

@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import Home from './components/Home';
-import ModelViewer from './components/ModelViewer';
+import Home from './Home';
+import ModelViewer from './ModelViewer';
+import ToHomeButton from './buttons/ToHomeButton';
+import ToCorrectButton from './buttons/ToCorrectButton';
 
-function App() {
-  const [showModels, setShowModels] = useState(false);
+function MainApp() {
 
-  const handleNextClick = () => {
-    setShowModels(true);  // モデル表示画面に遷移
-  };
+
 
   return (
     <div className="App">
-      {!showModels ? (
-        <Home onNextClick={handleNextClick} />
-      ) : (
+      <h1 className="text-xl mb-5 underline decoration-solid">
+        比較画面
+      </h1>
         <div className="flex justify-around mt-10">
           {/* 左側のモデル（monkeyTrue.glb） */}
           <div className="w-1/2 flex flex-col items-center">
@@ -40,9 +39,17 @@ function App() {
 
           </div>
         </div>
-      )}
+        <div className="flex justify-center">
+          <ToHomeButton
+            buttonText='Home画面に戻る'
+          />
+          
+          <ToCorrectButton
+            buttonText='誤りに気が付いた'
+          />
+        </div>
     </div>
   );
 }
 
-export default App;
+export default MainApp;
