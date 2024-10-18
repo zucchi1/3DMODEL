@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import Home from './components/Home';
-import ModelViewer from './components/ModelViewer';
-import App2Home from './components/buttons/app2Home';
+import Home from './Home';
+import ModelViewer from './ModelViewer';
+import ToHomeButton from './buttons/ToHomeButton';
+import ToCorrectButton from './buttons/ToCorrectButton';
 
-function App() {
+function MainApp() {
 
 
 
@@ -39,10 +40,16 @@ function App() {
           </div>
         </div>
         <div className="flex justify-center">
-          <App2Home/>
+          <ToHomeButton
+            buttonText='Home画面に戻る'
+          />
+          
+          <ToCorrectButton
+            buttonText='誤りに気が付いた'
+          />
         </div>
     </div>
   );
 }
 
-export default App;
+export default MainApp;
