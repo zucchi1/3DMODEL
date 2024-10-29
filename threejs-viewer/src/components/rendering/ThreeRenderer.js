@@ -1,4 +1,3 @@
-// src/components/rendering/ThreeRenderer.js
 import {
   WebGLRenderer,
   Scene,
@@ -9,6 +8,8 @@ import {
   Mesh,
   SRGBColorSpace,
   Color,
+  AxesHelper,
+  GridHelper,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -21,7 +22,7 @@ function createCube() {
   return new Mesh(geometry, material);
 }
 
-export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
+export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible) {
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -47,7 +48,7 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
     const sceneInstance = new Scene();
     sceneInstance.background = new Color(0xf5f5f5);
     const cameraInstance = new PerspectiveCamera(45, width / height, 1, 10000);
-    cameraInstance.position.set(0, 400, -1000);
+    cameraInstance.position.set(0, 100, -300);
 
     const controls = new OrbitControls(
       cameraInstance,
@@ -57,31 +58,41 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
     light.position.set(1, 1, 1);
     sceneInstance.add(light);
 
+    // グリッドと軸をisGridVisibleの値に応じて追加
+    let gridHelper, axesHelper;
+    if (isGridVisible) {
+      gridHelper = new GridHelper(2000, 50);
+      gridHelper.rotation.x = Math.PI / 2;
+      sceneInstance.add(gridHelper);
+
+      axesHelper = new AxesHelper(1000);
+      sceneInstance.add(axesHelper);
+    }
+
     // 条件によって異なる3Dモデルを追加
+    let model;
     if (glbPath === "plate") {
-      // glbPathが "plate" の場合、丸皿を追加
-      const plate = createPlate();
-      plate.position.set(0, -200, 0); // 位置調整
-      sceneInstance.add(plate);
+      model = createPlate();
+      model.position.set(0, -200, 0);
+      sceneInstance.add(model);
       setIsRendererReady(true);
     } else if (glbPath) {
-      // GLBファイルが指定されている場合、そのファイルをロード
       const loader = new GLTFLoader();
       loader.load(glbPath, (gltf) => {
-        const model = gltf.scene;
+        model = gltf.scene;
         model.scale.set(400.0, 400.0, 400.0);
         model.position.set(0, -400, 0);
         sceneInstance.add(model);
         setIsRendererReady(true);
       });
     } else {
-      // GLBファイルもplateも指定されていない場合、立方体を追加
-      const cube = createCube();
-      cube.position.set(0, -400, 0);
-      sceneInstance.add(cube);
+      model = createCube();
+      model.position.set(0, -400, 0);
+      sceneInstance.add(model);
       setIsRendererReady(true);
     }
 
+    // アニメーション関数の設定
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
@@ -89,14 +100,19 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
     };
     animate();
 
+    // 状態の更新
     setRenderer(rendererInstance);
     setScene(sceneInstance);
     setCamera(cameraInstance);
 
+    // クリーンアップ処理
     return () => {
-      rendererInstance.dispose(); // クリーンアップ
+      if (gridHelper) sceneInstance.remove(gridHelper);
+      if (axesHelper) sceneInstance.remove(axesHelper);
+      if (model) sceneInstance.remove(model);
+      rendererInstance.dispose();
     };
-  }, [glbPath, canvasId, isModelVisible]);
+  }, [glbPath, canvasId, isModelVisible, isGridVisible]);
 
   return { renderer, scene, camera, isRendererReady };
 }
