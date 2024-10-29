@@ -3,6 +3,8 @@ import { useThreeRenderer } from './rendering/ThreeRenderer';
 import DownloadButton from './buttons/DownloadButton';
 import ToggleButton from './buttons/ToggleButton';
 import GridButton from './buttons/GridButton';
+import { Camera } from 'three';
+import CameraPositionLogger from './buttons/CameraPositionLogger';
 
 function ModelViewer({ glbPath, imagePath, caption }) {
   const [isModelVisible, setIsModelVisible] = useState(true);
@@ -35,7 +37,8 @@ function ModelViewer({ glbPath, imagePath, caption }) {
           <><DownloadButton renderer={renderer} scene={scene} camera={camera} />
           <GridButton
             isGridVisible={isGridVisible}
-            setIsGridVisible={setIsGridVisible} /></>
+            setIsGridVisible={setIsGridVisible} />
+            <CameraPositionLogger camera={camera}/></>
         )}
       </div>
     </div>

@@ -8,7 +8,7 @@ import ToCorrectButton from "./buttons/ToCorrectButton";
 function MainApp() {
   return (
     <div className="App">
-      <h1 className="text-xl mb-5 underline decoration-solid">比較画面</h1>
+      <h1 className="mb-4 text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">比較画面</h1>
       <div className="flex justify-around mt-10">
         {/* 左側のモデル（monkeyTrue.glb） */}
         <div className="w-1/2 flex flex-col items-center">
@@ -30,7 +30,7 @@ function MainApp() {
           />
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center space-x-4">
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
       </div>

@@ -3,37 +3,37 @@ import * as THREE from "three";
 export function createPlate() {
   const group = new THREE.Group();
 
-  // 比率を保持しつつ、自然に見えるように設定
+  // スケール調整
   const scaleFactor = 10;
 
-  // プレートのメイン部分 (M2の直径 27.0 cm、高さ M4 4.5 cm)
-  const plateGeometry = new THREE.CylinderGeometry(13.5 * scaleFactor, 13.5 * scaleFactor, 4.0 * scaleFactor, 64, 1, true);
-  const plateMaterial = new THREE.MeshBasicMaterial({ color: 0xffcc99, side: THREE.DoubleSide }); // 柔らかな色
+  // メイン部分の設定 (中央からリムまで滑らかに上がる)
+  const plateGeometry = new THREE.CylinderGeometry(13.5 * scaleFactor, 12.5 * scaleFactor, 3.5 * scaleFactor, 64, 1, false);
+  const plateMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, shininess: 80 }); // 白い色と光沢
   const plateMesh = new THREE.Mesh(plateGeometry, plateMaterial);
   plateMesh.position.y = 2.0 * scaleFactor;
   group.add(plateMesh);
 
-  // リムの部分（メイン部分とスムーズに接続）
-  const rimGeometry = new THREE.RingGeometry(13.5 * scaleFactor, 15.5 * scaleFactor, 64);
-  const rimMaterial = new THREE.MeshBasicMaterial({ color: 0xdddddd, side: THREE.DoubleSide }); // 薄い灰色
+  // リム（皿の外縁に自然なカーブを追加）
+  const rimGeometry = new THREE.CylinderGeometry(15.5 * scaleFactor, 13.5 * scaleFactor, 1.0 * scaleFactor, 64, 1, true);
+  const rimMaterial = new THREE.MeshPhongMaterial({ color: 0xf0f0f0, shininess: 70 });
   const rimMesh = new THREE.Mesh(rimGeometry, rimMaterial);
-  rimMesh.rotation.x = Math.PI / 2;
-  rimMesh.position.y = 4.05 * scaleFactor; // メイン部分の上に接続
+  rimMesh.position.y = 4.0 * scaleFactor;
   group.add(rimMesh);
 
-  // リムの厚みを持たせるためのリング
-  const rimEdgeGeometry = new THREE.CylinderGeometry(15.5 * scaleFactor, 15.5 * scaleFactor, 0.2 * scaleFactor, 64, 1);
-  const rimEdgeMaterial = new THREE.MeshBasicMaterial({ color: 0xdddddd });
-  const rimEdgeMesh = new THREE.Mesh(rimEdgeGeometry, rimEdgeMaterial);
-  rimEdgeMesh.position.y = 4.5 * scaleFactor;
-  group.add(rimEdgeMesh);
+  // 糸底（底部に滑らかに接続）
+  const footGeometry = new THREE.CylinderGeometry(6.25 * scaleFactor, 6.25 * scaleFactor, 0.5 * scaleFactor, 32);
+  const footMaterial = new THREE.MeshPhongMaterial({ color: 0xdddddd, shininess: 30 });
+  const footMesh = new THREE.Mesh(footGeometry, footMaterial);
+  footMesh.position.y = -1.75 * scaleFactor;
+  group.add(footMesh);
 
-  // 糸底（自然に底部と接続）
-  const footRingGeometry = new THREE.CylinderGeometry(12.5 * scaleFactor, 12.5 * scaleFactor, 0.1 * scaleFactor, 64, 1);
-  const footRingMaterial = new THREE.MeshBasicMaterial({ color: 0xffffcc });
-  const footRingMesh = new THREE.Mesh(footRingGeometry, footRingMaterial);
-  footRingMesh.position.y = -2.0 * scaleFactor;
-  group.add(footRingMesh);
+  // 環境光とスポットライトを追加してリアルに照らす
+  const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // 環境光
+  const spotLight = new THREE.SpotLight(0xffffff, 2);
+  spotLight.position.set(0 * scaleFactor, 0 * scaleFactor, 0 * scaleFactor);
+  spotLight.castShadow = true;
+  group.add(ambientLight);
+  group.add(spotLight);
 
   return group;
 }
