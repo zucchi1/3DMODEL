@@ -1,9 +1,19 @@
 // src/components/rendering/ThreeRenderer.js
-import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, BoxGeometry, MeshBasicMaterial, Mesh, SRGBColorSpace } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useEffect, useState } from 'react';
-import { createPlate } from './SpherePlate';  // 丸皿生成関数をインポート
+import {
+  WebGLRenderer,
+  Scene,
+  PerspectiveCamera,
+  DirectionalLight,
+  BoxGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  SRGBColorSpace,
+  Color,
+} from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { useEffect, useState } from "react";
+import { createPlate } from "./SpherePlate"; // 丸皿生成関数をインポート
 
 function createCube() {
   const geometry = new BoxGeometry(400, 400, 400);
@@ -19,7 +29,7 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
 
   useEffect(() => {
     if (!isModelVisible) {
-      return;  // モデルが表示されていない場合、何もしない
+      return; // モデルが表示されていない場合、何もしない
     }
 
     const canvas = document.querySelector(`#${canvasId}`);
@@ -35,10 +45,14 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
     rendererInstance.outputColorSpace = SRGBColorSpace;
 
     const sceneInstance = new Scene();
+    sceneInstance.background = new Color(0xf5f5f5);
     const cameraInstance = new PerspectiveCamera(45, width / height, 1, 10000);
     cameraInstance.position.set(0, 400, -1000);
 
-    const controls = new OrbitControls(cameraInstance, rendererInstance.domElement);
+    const controls = new OrbitControls(
+      cameraInstance,
+      rendererInstance.domElement
+    );
     const light = new DirectionalLight(0xffffff);
     light.position.set(1, 1, 1);
     sceneInstance.add(light);
@@ -80,7 +94,7 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
     setCamera(cameraInstance);
 
     return () => {
-      rendererInstance.dispose();  // クリーンアップ
+      rendererInstance.dispose(); // クリーンアップ
     };
   }, [glbPath, canvasId, isModelVisible]);
 
