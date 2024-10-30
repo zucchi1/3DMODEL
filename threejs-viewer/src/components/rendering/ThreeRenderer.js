@@ -6,7 +6,6 @@ import {
   SRGBColorSpace,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useEffect, useState } from "react";
 import { addDirectionalLight, addGrid, addAxes } from "../helpers/SceneHelpers";
 import { loadModel } from "../helpers/ModelLoader"; // モデルローダー関数のインポート

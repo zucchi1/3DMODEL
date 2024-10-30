@@ -1,12 +1,18 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { createCube } from "../rendering/CubeModel";
 import { createPlate } from "../rendering/SpherePlate";
+import { createPlate1 } from "../rendering/SpherePlate1";
 
 export async function loadModel(glbPath, scene) {
   if (!glbPath) return createCube();
 
   if (glbPath === "plate") {
     const plate = createPlate();
+    plate.position.set(0, 0, 0);
+    return plate;
+  }
+  if (glbPath === "plate1") {
+    const plate = createPlate1();
     plate.position.set(0, 0, 0);
     return plate;
   }

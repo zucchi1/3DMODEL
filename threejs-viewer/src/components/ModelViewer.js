@@ -3,11 +3,10 @@ import { useThreeRenderer } from './rendering/ThreeRenderer';
 import DownloadButton from './buttons/DownloadButton';
 import ToggleButton from './buttons/ToggleButton';
 import GridButton from './buttons/GridButton';
-import { Camera } from 'three';
 import CameraPositionLogger from './buttons/CameraPositionLogger';
 
 function ModelViewer({ glbPath, imagePath, caption }) {
-  const [isModelVisible, setIsModelVisible] = useState(true);
+  const [isModelVisible, setIsModelVisible] = useState(false);
   const [isGridVisible, setIsGridVisible]=useState(false);
   const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible , isGridVisible);  // isModelVisibleを依存関係に追加
 
@@ -34,11 +33,13 @@ function ModelViewer({ glbPath, imagePath, caption }) {
         />
         {/* モデルが表示されている時だけダウンロードボタンを表示 */}
         {isModelVisible && isRendererReady && (
-          <><DownloadButton renderer={renderer} scene={scene} camera={camera} />
+          <>
+          <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath}/>
           <GridButton
             isGridVisible={isGridVisible}
             setIsGridVisible={setIsGridVisible} />
-            <CameraPositionLogger camera={camera}/></>
+            <CameraPositionLogger camera={camera}/>
+            </>
         )}
       </div>
     </div>
