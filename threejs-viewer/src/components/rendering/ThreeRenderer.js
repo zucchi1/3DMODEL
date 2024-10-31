@@ -1,87 +1,61 @@
-// src/components/rendering/ThreeRenderer.js
 import {
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
-  DirectionalLight,
-  BoxGeometry,
-  MeshBasicMaterial,
-  Mesh,
-  SRGBColorSpace,
   Color,
+  SRGBColorSpace,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useEffect, useState } from "react";
-import { createPlate } from "./SpherePlate"; // 丸皿生成関数をインポート
+import { addDirectionalLight, addGrid, addAxes } from "../helpers/SceneHelpers";
+import { loadModel } from "../helpers/ModelLoader"; // モデルローダー関数のインポート
 
-function createCube() {
-  const geometry = new BoxGeometry(400, 400, 400);
-  const material = new MeshBasicMaterial({ color: 0x00ff00 });
-  return new Mesh(geometry, material);
-}
-
-export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
+export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible) {
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
   const [isRendererReady, setIsRendererReady] = useState(false);
 
   useEffect(() => {
-    if (!isModelVisible) {
-      return; // モデルが表示されていない場合、何もしない
-    }
+    if (!isModelVisible) return;
 
-    const canvas = document.querySelector(`#${canvasId}`);
+    const canvas = document.getElementById(canvasId);
     if (!canvas) {
       console.error("Canvas element not found");
       return;
     }
 
+    // Renderer setup
     const rendererInstance = new WebGLRenderer({ canvas });
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    rendererInstance.setSize(width, height);
+    rendererInstance.setSize(canvas.clientWidth, canvas.clientHeight);
     rendererInstance.outputColorSpace = SRGBColorSpace;
 
+    // Scene setup
     const sceneInstance = new Scene();
     sceneInstance.background = new Color(0xf5f5f5);
-    const cameraInstance = new PerspectiveCamera(45, width / height, 1, 10000);
-    cameraInstance.position.set(0, 400, -1000);
 
-    const controls = new OrbitControls(
-      cameraInstance,
-      rendererInstance.domElement
-    );
-    const light = new DirectionalLight(0xffffff);
-    light.position.set(1, 1, 1);
-    sceneInstance.add(light);
+    // Camera setup
+    const cameraInstance = createCamera(canvas);
+    const controls = new OrbitControls(cameraInstance, rendererInstance.domElement);
 
-    // 条件によって異なる3Dモデルを追加
-    if (glbPath === "plate") {
-      // glbPathが "plate" の場合、丸皿を追加
-      const plate = createPlate();
-      plate.position.set(0, -200, 0); // 位置調整
-      sceneInstance.add(plate);
-      setIsRendererReady(true);
-    } else if (glbPath) {
-      // GLBファイルが指定されている場合、そのファイルをロード
-      const loader = new GLTFLoader();
-      loader.load(glbPath, (gltf) => {
-        const model = gltf.scene;
-        model.scale.set(400.0, 400.0, 400.0);
-        model.position.set(0, -400, 0);
-        sceneInstance.add(model);
-        setIsRendererReady(true);
-      });
-    } else {
-      // GLBファイルもplateも指定されていない場合、立方体を追加
-      const cube = createCube();
-      cube.position.set(0, -400, 0);
-      sceneInstance.add(cube);
-      setIsRendererReady(true);
+    // Lighting setup
+    addDirectionalLight(sceneInstance);
+
+    // Grid and axes helpers
+    if (isGridVisible) {
+      addGrid(sceneInstance);
+      addAxes(sceneInstance);
     }
 
+    // Model loading
+    loadModel(glbPath, sceneInstance).then((model) => {
+      if (model) {
+        sceneInstance.add(model);
+        setIsRendererReady(true);
+      }
+    });
+
+    // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
@@ -89,14 +63,25 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible) {
     };
     animate();
 
+    // State updates
     setRenderer(rendererInstance);
     setScene(sceneInstance);
     setCamera(cameraInstance);
 
+    // Cleanup
     return () => {
-      rendererInstance.dispose(); // クリーンアップ
+      sceneInstance.clear();
+      rendererInstance.dispose();
     };
-  }, [glbPath, canvasId, isModelVisible]);
+  }, [glbPath, canvasId, isModelVisible, isGridVisible]);
 
   return { renderer, scene, camera, isRendererReady };
+}
+
+// Camera creation helper
+function createCamera(canvas) {
+  const aspect = canvas.clientWidth / canvas.clientHeight;
+  const camera = new PerspectiveCamera(45, aspect, 1, 10000);
+  camera.position.set(0, 100, -300);
+  return camera;
 }

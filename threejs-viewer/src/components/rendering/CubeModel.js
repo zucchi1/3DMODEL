@@ -1,13 +1,7 @@
-// src/components/rendering/CubeModel.js
-import * as THREE from 'three';
+import { BoxGeometry, MeshBasicMaterial, Mesh } from "three";
 
-function CubeModel(scene) {
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-
-  return cube;
+export function createCube() {
+  const geometry = new BoxGeometry(400, 400, 400);
+  const material = new MeshBasicMaterial({ color: 0x00ff00 });
+  return new Mesh(geometry, material);
 }
-
-export default CubeModel;

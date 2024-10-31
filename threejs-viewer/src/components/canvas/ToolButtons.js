@@ -1,12 +1,10 @@
 import React from "react";
 import {
   FaDownload,
-  FaEraser,
   FaPen,
-  FaPenAlt,
   FaTrashAlt,
 } from "react-icons/fa";
-import { FaDownLeftAndUpRightToCenter } from "react-icons/fa6";
+
 
 function ToolButtons({
   penActive,

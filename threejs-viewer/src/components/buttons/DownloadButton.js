@@ -1,10 +1,10 @@
 import React from 'react';
 import captureScreen from '../../utils/capture';
 
-function DownloadButton({ renderer, scene, camera }) {
+function DownloadButton({ renderer, scene, camera,glbPath}) {
   const handleClick = () => {
     if (renderer && scene && camera) {
-      captureScreen(renderer, scene, camera);
+      captureScreen(renderer, scene, camera,glbPath);
     }
   };
 
