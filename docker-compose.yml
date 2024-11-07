@@ -1,0 +1,40 @@
+
+services:
+
+  app:
+    build:
+      context: ./php
+    volumes:
+      - ./projects:/var/www/html
+    networks:
+      - app-network
+
+  web:
+    image: nginx:latest
+    volumes:
+      - ./projects:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  db_data:
