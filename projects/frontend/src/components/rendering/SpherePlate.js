@@ -20,7 +20,7 @@ export function createPlate() {
     shininess: 80,
   }); // 白い色と光沢
   const plateMesh = new THREE.Mesh(plateGeometry, plateMaterial);
-  plateMesh.position.y = 2.0 * scaleFactor;
+  plateMesh.position.y = 2.25* scaleFactor;
   group.add(plateMesh);
 
   // リム（皿の外縁に自然なカーブを追加）
@@ -37,14 +37,14 @@ export function createPlate() {
     shininess: 70,
   });
   const rimMesh = new THREE.Mesh(rimGeometry, rimMaterial);
-  rimMesh.position.y = 4.0 * scaleFactor;
+  rimMesh.position.y = 4.5 * scaleFactor;
   group.add(rimMesh);
 
   // 糸底（底部に滑らかに接続）
   const footGeometry = new THREE.CylinderGeometry(
     9.25 * scaleFactor,
     9.25 * scaleFactor,
-    4.5 * scaleFactor,
+    0.5 * scaleFactor,
     32
   );
   const footMaterial = new THREE.MeshPhongMaterial({
@@ -52,7 +52,7 @@ export function createPlate() {
     shininess: 30,
   });
   const footMesh = new THREE.Mesh(footGeometry, footMaterial);
-  // footMesh.position.y = -1.75 * scaleFactor;
+  footMesh.position.y = 0.25 * scaleFactor;
   group.add(footMesh);
 
   // 環境光とスポットライトを追加してリアルに照らす

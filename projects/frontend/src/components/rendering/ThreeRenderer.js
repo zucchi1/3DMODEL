@@ -82,6 +82,6 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisibl
 function createCamera(canvas) {
   const aspect = canvas.clientWidth / canvas.clientHeight;
   const camera = new PerspectiveCamera(45, aspect, 1, 10000);
-  camera.position.set(0, 100, -300);
+  camera.position.set(0, 70, -300);
   return camera;
 }

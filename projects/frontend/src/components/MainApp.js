@@ -25,7 +25,7 @@ function MainApp() {
         <div className="w-1/2 flex flex-col items-center">
           <h2 className="text-xl mb-2">右</h2>
           <ModelViewer
-            glbPath="glass" // plateを指定して丸皿モデルを表示
+            glbPath="model" // plateを指定して丸皿モデルを表示
             imagePath="./drawing/monkeyFalse.png"
             caption="右"
           />
