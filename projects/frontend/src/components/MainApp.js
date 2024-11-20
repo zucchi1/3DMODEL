@@ -7,7 +7,9 @@ import ToCorrectButton from "./buttons/ToCorrectButton";
 function MainApp() {
   return (
     <div className="App">
-      <h1 className="mb-4 text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">比較画面</h1>
+      <h1 className="mb-4 text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+        比較画面
+      </h1>
       <div className="flex justify-around mt-10">
         {/* 左側のモデル（monkeyTrue.glb） */}
         <div className="w-1/2 flex flex-col items-center">
@@ -23,7 +25,7 @@ function MainApp() {
         <div className="w-1/2 flex flex-col items-center">
           <h2 className="text-xl mb-2">右</h2>
           <ModelViewer
-            glbPath="plate1" // plateを指定して丸皿モデルを表示
+            glbPath="model" // plateを指定して丸皿モデルを表示
             imagePath="./drawing/monkeyFalse.png"
             caption="右"
           />
