@@ -27,7 +27,7 @@ export async function loadModel(glbPath,shareValue=0.5) {
     }
     case "model": {
       const group = new THREE.Group();
-      const glass = createGlass(shareValue);
+      const glass = createGlass7(shareValue);
       const plate = createPlate();
       glass.position.set(-100, 0, 0);
       group.add(glass);
