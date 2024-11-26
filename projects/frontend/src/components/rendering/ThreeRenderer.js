@@ -6,15 +6,24 @@ import {
   SRGBColorSpace,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { addDirectionalLight, addGrid, addAxes } from "../helpers/SceneHelpers";
-import { loadModel } from "../helpers/ModelLoader"; // モデルローダー関数のインポート
+import { loadModel } from "../helpers/ModelLoader";
 
-export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible) {
+export function useThreeRenderer(
+  glbPath,
+  canvasId,
+  isModelVisible,
+  isGridVisible,
+  shearValue // シークバーの値
+) {
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
-  const [camera, setCamera] = useState(null);
-  const [isRendererReady, setIsRendererReady] = useState(false);
+  const isRendererReady = useRef(false);
+
+  const cameraRef = useRef(null); // カメラを保持
+  const controlsRef = useRef(null); // OrbitControlsを保持
+  const modelRef = useRef(null); // 現在のモデルを保持
 
   useEffect(() => {
     if (!isModelVisible) return;
@@ -35,8 +44,13 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisibl
     sceneInstance.background = new Color(0xf5f5f5);
 
     // Camera setup
-    const cameraInstance = createCamera(canvas);
-    const controls = new OrbitControls(cameraInstance, rendererInstance.domElement);
+    const aspect = canvas.clientWidth / canvas.clientHeight;
+    const camera = new PerspectiveCamera(45, aspect, 1, 10000);
+    camera.position.set(0, 70, -400);
+    cameraRef.current = camera;
+
+    const controls = new OrbitControls(camera, rendererInstance.domElement);
+    controlsRef.current = controls;
 
     // Lighting setup
     addDirectionalLight(sceneInstance);
@@ -48,10 +62,11 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisibl
     }
 
     // Model loading
-    loadModel(glbPath, sceneInstance).then((model) => {
+    loadModel(glbPath, sceneInstance, shearValue).then((model) => {
       if (model) {
         sceneInstance.add(model);
-        setIsRendererReady(true);
+        modelRef.current = model; // モデルを保持
+        isRendererReady.current = true;
       }
     });
 
@@ -59,29 +74,34 @@ export function useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisibl
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
-      rendererInstance.render(sceneInstance, cameraInstance);
+      rendererInstance.render(sceneInstance, camera);
     };
     animate();
 
-    // State updates
+    // Set state
     setRenderer(rendererInstance);
     setScene(sceneInstance);
-    setCamera(cameraInstance);
 
     // Cleanup
     return () => {
-      sceneInstance.clear();
       rendererInstance.dispose();
+      sceneInstance.clear();
     };
-  }, [glbPath, canvasId, isModelVisible, isGridVisible]);
+  }, [canvasId, glbPath, isModelVisible, isGridVisible]);
 
-  return { renderer, scene, camera, isRendererReady };
-}
+  useEffect(() => {
+    if (!scene || !modelRef.current) return;
 
-// Camera creation helper
-function createCamera(canvas) {
-  const aspect = canvas.clientWidth / canvas.clientHeight;
-  const camera = new PerspectiveCamera(45, aspect, 1, 10000);
-  camera.position.set(0, 70, -300);
-  return camera;
+    // 既存モデルを削除して新しいモデルを読み込む
+    scene.remove(modelRef.current);
+
+    loadModel(glbPath, scene, shearValue).then((model) => {
+      if (model) {
+        scene.add(model);
+        modelRef.current = model; // 新しいモデルを保持
+      }
+    });
+  }, [shearValue, scene, glbPath]);
+
+  return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef };
 }

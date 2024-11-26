@@ -1,11 +1,12 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { createCube } from "../rendering/CubeModel";
-import { createPlate } from "../rendering/SpherePlate";
-import { createPlate1 } from "../rendering/SpherePlate1";
-import { createGlass } from "../rendering/Glass";
+import { createPlate } from "../rendering/Plate/SpherePlate";
+import { createPlate1 } from "../rendering/Plate/SpherePlate1";
+import { createGlass } from "../rendering/Glass/Glass";
+import { createGlass7 } from "../rendering/Glass/Glass7";
 
-export async function loadModel(glbPath, scene) {
+export async function loadModel(glbPath,shareValue=0.5) {
   if (!glbPath) return createCube();
 
   switch (glbPath) {
@@ -26,7 +27,17 @@ export async function loadModel(glbPath, scene) {
     }
     case "model": {
       const group = new THREE.Group();
-      const glass = createGlass();
+      const glass = createGlass(shareValue);
+      const plate = createPlate();
+      glass.position.set(-100, 0, 0);
+      group.add(glass);
+      plate.position.set(100, 0, 0);
+      group.add(plate);
+      return group;
+    }
+    case "model7": {
+      const group = new THREE.Group();
+      const glass = createGlass7();
       const plate = createPlate();
       glass.position.set(-100, 0, 0);
       group.add(glass);

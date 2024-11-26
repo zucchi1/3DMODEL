@@ -31,15 +31,15 @@ function ModelViewer({ glbPath, imagePath, caption }) {
           isModelVisible={isModelVisible} 
           setIsModelVisible={setIsModelVisible} 
         />
-        {/* モデルが表示されている時だけダウンロードボタンを表示 */}
+        {/* モデルが表示されている時だけ機能ボタンを表示 */}
         {isModelVisible && isRendererReady && (
           <>
           <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath}/>
           <GridButton
             isGridVisible={isGridVisible}
             setIsGridVisible={setIsGridVisible} />
-            <CameraPositionLogger camera={camera}/>
-            </>
+          <CameraPositionLogger camera={camera}/>
+          </>
         )}
       </div>
     </div>
