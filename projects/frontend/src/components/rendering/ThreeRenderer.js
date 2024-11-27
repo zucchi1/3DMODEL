@@ -24,7 +24,7 @@ export function useThreeRenderer(
   const cameraRef = useRef(null); // カメラを保持
   const controlsRef = useRef(null); // OrbitControlsを保持
   const modelRef = useRef(null); // 現在のモデルを保持
-  console.log('ShearValue(useThreeRenderer)',shearValue);
+  
   useEffect(() => {
     if (!isModelVisible) return;
 
