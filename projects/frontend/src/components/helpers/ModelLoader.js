@@ -6,8 +6,9 @@ import { createPlate1 } from "../rendering/Plate/SpherePlate1";
 import { createGlass } from "../rendering/Glass/Glass";
 import { createGlass7 } from "../rendering/Glass/Glass7";
 
-export async function loadModel(glbPath,shareValue=0.5) {
+export async function loadModel(glbPath,sceneInstance, shareValue=1) {
   if (!glbPath) return createCube();
+  console.log("shareValue", shareValue);
 
   switch (glbPath) {
     case "plate": {
@@ -29,7 +30,7 @@ export async function loadModel(glbPath,shareValue=0.5) {
       const group = new THREE.Group();
       const glass = createGlass7(shareValue);
       const plate = createPlate();
-      glass.position.set(-100, 0, 0);
+      glass.position.set(-100, 61, 0);
       group.add(glass);
       plate.position.set(100, 0, 0);
       group.add(plate);
@@ -39,7 +40,7 @@ export async function loadModel(glbPath,shareValue=0.5) {
       const group = new THREE.Group();
       const glass = createGlass7();
       const plate = createPlate();
-      glass.position.set(-100, 0, 0);
+      glass.position.set(-100, 61, 0);
       group.add(glass);
       plate.position.set(100, 0, 0);
       group.add(plate);
