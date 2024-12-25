@@ -4,6 +4,7 @@ import ModelViewer from "./ModelViewer";
 import ToHomeButton from "./buttons/ToHomeButton";
 import ToCorrectButton from "./buttons/ToCorrectButton";
 import ToSuggestButton from "./buttons/ToSuggestButton";
+import ModelSelecter from "./buttons/ModelSelecter";
 
 function MainApp() {
   return (
@@ -36,6 +37,7 @@ function MainApp() {
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
         <ToSuggestButton buttonText="示唆性を試す"/>
+        <ModelSelecter />
       </div>
     </div>
   );
