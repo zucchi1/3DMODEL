@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
-function ModelSelecter({ RightGlbPath, setRightGlbPath }) {
+function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
     const [selectedOption, setSelectedOption] = useState(null);
 
     const handleModelChange = (selectedOption) => {
@@ -10,12 +10,15 @@ function ModelSelecter({ RightGlbPath, setRightGlbPath }) {
 
     const handleLoadModel = () => {
         if (selectedOption) {
+            console.log("changed");
             setRightGlbPath(selectedOption.value);
+            console.log("changed model"+RightGlbPath);
         }
     };
 
     const options = [
         { value: 'plate1', label: 'plate1' },
+        { value: 'model', label: 'model' },
         { value: 'model1', label: 'model1' },
         { value: 'model7', label: 'model7' },
         // Add more options as needed

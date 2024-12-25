@@ -1,5 +1,5 @@
 // src/components/MainApp.js
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import ModelViewer from "./ModelViewer";
 import ToHomeButton from "./buttons/ToHomeButton";
 import ToCorrectButton from "./buttons/ToCorrectButton";
@@ -7,6 +7,7 @@ import ToSuggestButton from "./buttons/ToSuggestButton";
 import ModelSelecter from "./buttons/ModelSelecter";
 
 function MainApp() {
+  const[RightGlbPath,setRightGlbPath] = useState("model7");
   return (
     <div className="App">
       <h1 className="mb-4 text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -18,7 +19,7 @@ function MainApp() {
           <h2 className="text-xl mb-2">左</h2>
           <ModelViewer
             glbPath="model"
-            imagePath="./drawing/monkeyTrue.png"
+            imagePath="./drawing/motifTrue.png"
             caption="左"
           />
         </div>
@@ -27,7 +28,7 @@ function MainApp() {
         <div className="w-1/2 flex flex-col items-center">
           <h2 className="text-xl mb-2">右</h2>
           <ModelViewer
-            glbPath="model7" // plateを指定して丸皿モデルを表示
+            glbPath={RightGlbPath} // plateを指定して丸皿モデルを表示
             imagePath="./drawing/monkeyFalse.png"
             caption="右"
           />
@@ -37,7 +38,9 @@ function MainApp() {
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
         <ToSuggestButton buttonText="示唆性を試す"/>
-        <ModelSelecter />
+        <ModelSelecter 
+        RightGlbPath={RightGlbPath}
+        setRightGlbPath={setRightGlbPath} />
       </div>
     </div>
   );

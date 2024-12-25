@@ -36,6 +36,16 @@ export async function loadModel(glbPath,sceneInstance, shareValue=0.5) {
       group.add(plate);
       return group;
     }
+    case "model1": {
+      const group = new THREE.Group();
+      const glass = createGlass();
+      const plate = createPlate1();
+      glass.position.set(-100, 0, 0);
+      group.add(glass);
+      plate.position.set(100, 0, 0);
+      group.add(plate);
+      return group;
+    }
     case "model7": {
       const group = new THREE.Group();
       const glass = createGlass7();
