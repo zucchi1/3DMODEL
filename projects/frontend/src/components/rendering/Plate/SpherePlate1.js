@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { CSG } from 'three-csg-ts';
 
 export function createPlate1() {
   const group = new THREE.Group();
@@ -16,11 +17,11 @@ export function createPlate1() {
     false
   );
   const plateMaterial = new THREE.MeshPhongMaterial({
-    color: 0xff0000,
-    shininess: 80,
+    color: 0xdddddd,
+    shininess: 60,
   }); // 白い色と光沢
   const plateMesh = new THREE.Mesh(plateGeometry, plateMaterial);
-  plateMesh.position.y = 2.25* scaleFactor;
+  plateMesh.position.y = 2.25 * scaleFactor;
   group.add(plateMesh);
 
   // リム（皿の外縁に自然なカーブを追加）
@@ -30,57 +31,57 @@ export function createPlate1() {
     1.0 * scaleFactor,
     64,
     1,
-    false
+    true
   );
-  const rimMaterial = new THREE.MeshPhongMaterial({
-    color: 0xf0f0f0,
-    shininess: 70,
-  });
-  const rimMesh = new THREE.Mesh(rimGeometry, rimMaterial);
-  rimMesh.position.y = 4.5 * scaleFactor;
-  group.add(rimMesh);
-
   const rimGeometry_trans = new THREE.CylinderGeometry(
     15.0 * scaleFactor,
     13.0 * scaleFactor,
     1.0 * scaleFactor,
     64,
     1,
-    false
+    true
   );
-  const rimMaterial_trans = new THREE.MeshPhongMaterial({
+
+  // ブール演算を使用してrimGeometryからrimGeometry_transの共通部分を削除
+  const rimCSG = CSG.fromMesh(new THREE.Mesh(rimGeometry));
+  const rimTransCSG = CSG.fromMesh(new THREE.Mesh(rimGeometry_trans));
+  const rimSubtractedCSG = rimCSG.subtract(rimTransCSG);
+  const rimSubtractedMesh = CSG.toMesh(rimSubtractedCSG, new THREE.Matrix4(), new THREE.MeshPhongMaterial({
     color: 0xf0f0f0,
     shininess: 70,
-  });
-  const rimMesh_trans = new THREE.Mesh(rimGeometry_trans, rimMaterial_trans);
-  rimMesh_trans.position.y = 4.5 * scaleFactor;
-  group.add(rimMesh_trans);
+  }));
+
+  rimSubtractedMesh.position.y = 4.5 * scaleFactor;
+  group.add(rimSubtractedMesh);
 
   // 糸底（底部に滑らかに接続）
   const footGeometry = new THREE.CylinderGeometry(
     9.25 * scaleFactor,
     9.25 * scaleFactor,
-    0.5 * scaleFactor,
-    32
+    1.0 * scaleFactor,
+    64,
+    1,
+    false
   );
   const footMaterial = new THREE.MeshPhongMaterial({
     color: 0xdddddd,
-    shininess: 30,
+    shininess: 70,
   });
   const footMesh = new THREE.Mesh(footGeometry, footMaterial);
   footMesh.position.y = 0.25 * scaleFactor;
   group.add(footMesh);
 
+  // せん断変形行列を作成
   const shearMatrix = new THREE.Matrix4();
-    shearMatrix.set(
-      1,0,0,0, // X軸の変形
-      0,1,0.3,0, // Y軸の変形 (ここがせん断)
-      0,0,1,0, // Z軸の変形
-      0,0,0,1 // 平行移動
-    );
-  
-    // ジオメトリにせん断変形を適用
-    group.applyMatrix4(shearMatrix);
+  shearMatrix.set(
+    1,0,0,0, // X軸の変形
+    0,1,0.3,0, // Y軸の変形 (ここがせん断)
+    0,0,1,0, // Z軸の変形
+    0,0,0,1 // 平行移動
+  );
+
+  // ジオメトリにせん断変形を適用
+  group.applyMatrix4(shearMatrix);
 
   // 環境光とスポットライトを追加してリアルに照らす
   const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // 環境光
