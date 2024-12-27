@@ -6,7 +6,7 @@ import GridButton from './buttons/GridButton';
 import CameraPositionLogger from './buttons/CameraPositionLogger';
 
 function ModelViewer({ glbPath, imagePath, caption }) {
-  const [isModelVisible, setIsModelVisible] = useState(false);
+  const [isModelVisible, setIsModelVisible] = useState(true);
   const [isGridVisible, setIsGridVisible]=useState(false);
   const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible , isGridVisible);  // isModelVisibleを依存関係に追加
 

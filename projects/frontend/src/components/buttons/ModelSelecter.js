@@ -18,9 +18,10 @@ function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
 
     const options = [
         { value: 'plate1', label: 'plate1' },
-        { value: 'model', label: 'model' },
-        { value: 'model1', label: 'model1' },
-        { value: 'model7', label: 'model7' },
+        { value: 'model', label: 'model/正解のモデル' },
+        { value: 'model1', label: 'model1/皿を丸く描いてしまう誤り' },
+        { value: 'model4', label: 'model4/グラスの上部を丸く描いてしまう誤り/断面間の誤り' },
+        { value: 'model7', label: 'model7/グラスを傾けて描く誤り' },
         // Add more options as needed
     ];
 
@@ -30,9 +31,10 @@ function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
                 value={selectedOption}
                 onChange={handleModelChange}
                 options={options}
-                placeholder="Select a model"
+                placeholder="Select a model　　　　　　　　　"
             />
-            <button onClick={handleLoadModel}>Load Model</button>
+            <button onClick={handleLoadModel}
+            className="bg-gray-200 text-gray px-4 py-2 rounded shadow-md hover:bg-gray-100">Load Model</button>
         </div>
     );
 }

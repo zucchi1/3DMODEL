@@ -1,5 +1,6 @@
 // src/components/MainApp.js
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
+import DrawingViewer from './DrawingViewer';
 import ModelViewer from "./ModelViewer";
 import ToHomeButton from "./buttons/ToHomeButton";
 import ToCorrectButton from "./buttons/ToCorrectButton";
@@ -16,20 +17,32 @@ function MainApp() {
       <div className="flex justify-around mt-10">
         {/* 左側のモデル（monkeyTrue.glb） */}
         <div className="w-1/2 flex flex-col items-center">
-          <h2 className="text-xl mb-2">左</h2>
+          <h2 className="text-xl font-extrabold mb-2">モチーフ</h2>
+          <h3>デッサン</h3>
+          <DrawingViewer
+            imagePath="./drawing/model.png"
+            caption="左"
+            />
+          <h3>3Dモデル</h3>
           <ModelViewer
             glbPath="model"
-            imagePath="./drawing/motifTrue.png"
+            imagePath="./drawing/model.png"
             caption="左"
           />
         </div>
 
         {/* 右側の丸皿モデル */}
-        <div className="w-1/2 flex flex-col items-center">
-          <h2 className="text-xl mb-2">右</h2>
-          <ModelViewer
-            glbPath={RightGlbPath} // plateを指定して丸皿モデルを表示
-            imagePath="./drawing/monkeyFalse.png"
+          <div className="w-1/2 flex flex-col items-center">
+            <h2 className="text-xl font-extrabold mb-2">誤り</h2>
+            <h3>デッサン</h3>
+            <DrawingViewer
+              imagePath={`./drawing/${RightGlbPath}.png`}
+              caption="右"
+              />
+            <h3>3Dモデル</h3>
+            <ModelViewer
+              glbPath={RightGlbPath} // plateを指定して丸皿モデルを表示
+            imagePath="./drawing/model1.png"
             caption="右"
           />
         </div>
@@ -37,7 +50,7 @@ function MainApp() {
       <div className="flex justify-center mb-10 space-x-4">
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
-        <ToSuggestButton buttonText="示唆性を試す"/>
+        <ToSuggestButton buttonText="シークバーを用いる"/>
         <ModelSelecter 
         RightGlbPath={RightGlbPath}
         setRightGlbPath={setRightGlbPath} />
