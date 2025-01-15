@@ -1,26 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useThreeRenderer } from './rendering/ThreeRenderer';
 import DownloadButton from './buttons/DownloadButton';
 import ToggleButton from './buttons/ToggleButton';
 import GridButton from './buttons/GridButton';
 import CameraPositionLogger from './buttons/CameraPositionLogger';
 
-function ModelViewer({ glbPath, imagePath, caption }) {
+function ModelViewer({ glbPath, imagePath, caption, canvasId }) {
   const [isModelVisible, setIsModelVisible] = useState(true);
   const [isGridVisible, setIsGridVisible]=useState(false);
-  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible , isGridVisible);  // isModelVisibleを依存関係に追加
+  const canvasRef = useRef(null);
+  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, canvasId, isModelVisible , isGridVisible);  // isModelVisibleを依存関係に追加
 
   useEffect(() => {
     if (!isModelVisible && renderer) {
       // 3Dモデルが表示されていない時、レンダラーを停止してメモリリークを防ぐ
+      console.log("dispose");
       renderer.dispose();
     }
   }, [isModelVisible, renderer]);
 
+  useEffect(() => {
+    if (renderer && scene && camera && isRendererReady) {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.render(scene, camera);
+      }
+    }
+  }, [renderer, scene, camera, isRendererReady]);
+
   return (
     <div className="relative">
       {isModelVisible ? (
-        <canvas id={`canvas-${caption}`} className="w-full h-96"></canvas>
+        <canvas id={canvasId} ref={canvasRef} className="w-full h-96"></canvas>
       ) : (
         <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-96 object-contain" />
       )}

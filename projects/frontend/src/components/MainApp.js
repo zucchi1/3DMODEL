@@ -20,14 +20,16 @@ function MainApp() {
           <h2 className="text-xl font-extrabold mb-2">モチーフ</h2>
           <h3>デッサン</h3>
           <DrawingViewer
-            imagePath="./drawing/model.png"
+            glbPath="model"
             caption="左"
-            />
+            canvasId="leftDrawingCanvas" // 一意のIDを追加
+          />
           <h3>3Dモデル</h3>
           <ModelViewer
             glbPath="model"
             imagePath="./drawing/model.png"
             caption="左"
+            canvasId="leftModelCanvas" // 一意のIDを追加
           />
         </div>
 
@@ -36,15 +38,18 @@ function MainApp() {
             <h2 className="text-xl font-extrabold mb-2">誤り</h2>
             <h3>デッサン</h3>
             <DrawingViewer
-              imagePath={`./drawing/${RightGlbPath}.png`}
+              glbPath={RightGlbPath}
               caption="右"
-              />
+              canvasId="rightDrawingCanvas" // 一意のIDを追加
+            />
             <h3>3Dモデル</h3>
             <ModelViewer
-              glbPath={RightGlbPath} // plateを指定して丸皿モデルを表示
+              glbPath={RightGlbPath} 
             imagePath="./drawing/model1.png"
             caption="右"
-          />
+            canvasId="rightModelCanvas" // 一意のIDを追加
+           />
+            
         </div>
       </div>
       <div className="flex justify-center mb-10 space-x-4">

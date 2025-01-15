@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useThreeRenderer } from './rendering/ThreeRenderer';
 
-function DrawingViewer({ imagePath, caption }) {
+function DrawingViewer({ glbPath, caption, canvasId }) {
+  const isModelVisible = true;
+  const isGridVisible = false;
+  const isOrbitControlsEnabled = false; // OrbitControlsを有効にするかどうかのフラグ
+  const { renderer } = useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible, isOrbitControlsEnabled); // isModelVisibleを依存関係に追加
+
+  useEffect(() => {
+    if (!isModelVisible && renderer) {
+      // 3Dモデルが表示されていない時、レンダラーを停止してメモリリークを防ぐ
+      renderer.dispose();
+    }
+  }, [isModelVisible, renderer]);
 
   return (
     <div className="relative">
-        <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-48 object-contain" />
+      <canvas id={canvasId} className="w-full h-48"></canvas>
     </div>
   );
 }

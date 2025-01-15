@@ -15,6 +15,7 @@ export function useThreeRenderer(
   canvasId,
   isModelVisible,
   isGridVisible,
+  isOrbitControlsEnabled,
   shearValue // シークバーの値
 ) {
   const [renderer, setRenderer] = useState(null);
@@ -24,7 +25,7 @@ export function useThreeRenderer(
   const cameraRef = useRef(null); // カメラを保持
   const controlsRef = useRef(null); // OrbitControlsを保持
   const modelRef = useRef(null); // 現在のモデルを保持
-  
+  console.log("isOrbitControlsEnabled", isOrbitControlsEnabled);
   useEffect(() => {
     if (!isModelVisible) return;
 
@@ -50,6 +51,7 @@ export function useThreeRenderer(
     cameraRef.current = camera;
 
     const controls = new OrbitControls(camera, rendererInstance.domElement);
+    controls.enabled = isOrbitControlsEnabled; // ここで有効/無効を設定
     controlsRef.current = controls;
 
     // Lighting setup
@@ -73,7 +75,9 @@ export function useThreeRenderer(
     // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
-      controls.update();
+      if (isOrbitControlsEnabled) {
+        controls.update();
+      }
       rendererInstance.render(sceneInstance, camera);
     };
     animate();
@@ -87,7 +91,13 @@ export function useThreeRenderer(
       rendererInstance.dispose();
       sceneInstance.clear();
     };
-  }, [canvasId, glbPath, isModelVisible, isGridVisible]);
+  }, [canvasId, glbPath, isModelVisible, isGridVisible, isOrbitControlsEnabled, shearValue]);
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.enabled = isOrbitControlsEnabled; // isOrbitControlsEnabledの変更に対応
+    }
+  }, [isOrbitControlsEnabled]);
 
   useEffect(() => {
     if (!scene || !modelRef.current) return;
@@ -103,5 +113,5 @@ export function useThreeRenderer(
     });
   }, [shearValue, scene, glbPath]);
 
-  return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef };
+  return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef};
 }

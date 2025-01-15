@@ -9,11 +9,11 @@ import * as THREE from "three";
 function SuggestModelViewer({ glbPath, caption }) {
   const isModelVisible = true;
   const [isGridVisible, setIsGridVisible] = useState(false);
-
+  const isOrbitControlsEnabled = false; // OrbitControlsを有効にするかどうかのフラグ
 
   // Three.js Renderer Hook
   const { renderer, scene, camera, isRendererReady} =
-    useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible, isGridVisible);
+    useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible, isGridVisible, isOrbitControlsEnabled);
 
   useEffect(() => {
     if (!isModelVisible && renderer) {
