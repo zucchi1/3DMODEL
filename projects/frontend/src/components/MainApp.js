@@ -44,7 +44,7 @@ function MainApp() {
             />
             <h3>3Dモデル</h3>
             <ModelViewer
-              glbPath={RightGlbPath} 
+            glbPath={RightGlbPath} 
             imagePath="./drawing/model1.png"
             caption="右"
             canvasId="rightModelCanvas" // 一意のIDを追加
@@ -55,7 +55,7 @@ function MainApp() {
       <div className="flex justify-center mb-10 space-x-4">
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
-        <ToSuggestButton buttonText="シークバーを用いる"/>
+        <ToSuggestButton buttonText="修正過程を見る"/>
         <ModelSelecter 
         RightGlbPath={RightGlbPath}
         setRightGlbPath={setRightGlbPath} />

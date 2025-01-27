@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-function ShearValueInput() {
-  const [tempShearValue, setTempShearValue] = useState(0.5); // シークバーの一時的な値
-  const [shearValue, setShearValue] = useState(0.5); // 確定された値
+function ShearValueInput({shearValue, setShearValue}) {
+  const [tempShearValue, setTempShearValue] = useState(0.1); // シークバーの一時的な値
   // シークバー操作時のイベント
   const handleShearChange = (event) => {
     setTempShearValue(parseFloat(event.target.value));
   };
   const applyShearValue = () => {
-    setShearValue(tempShearValue); // 一時的な値を確定させる
+    console.log("changed");
+    setShearValue(tempShearValue.value); // 一時的な値を確定させる
+    console.log("changed shear"+shearValue);
   };
   
 
@@ -24,7 +25,7 @@ function ShearValueInput() {
         type="range"
         min="0"
         max="0.5"
-        step="0.01"
+        step="0.1"
         value={tempShearValue}
         onChange={handleShearChange}
         className="w-3/4"

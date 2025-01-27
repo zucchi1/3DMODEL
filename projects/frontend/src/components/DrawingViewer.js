@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useThreeRenderer } from './rendering/ThreeRenderer';
 
-function DrawingViewer({ glbPath, caption, canvasId }) {
+function DrawingViewer({ glbPath, caption, canvasId ,shearValue}) {
   const isModelVisible = true;
   const isGridVisible = false;
   const isOrbitControlsEnabled = false; // OrbitControlsを有効にするかどうかのフラグ
-  const { renderer } = useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible, isOrbitControlsEnabled); // isModelVisibleを依存関係に追加
+  const { renderer } = useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible, isOrbitControlsEnabled,shearValue); // isModelVisibleを依存関係に追加
 
   useEffect(() => {
     if (!isModelVisible && renderer) {

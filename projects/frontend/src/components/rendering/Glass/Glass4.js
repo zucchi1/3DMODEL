@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
-export function createGlass4(shearValue = 0.5) {
+export function createGlass4(shearValue) {
+  shearValue = shearValue !== undefined ? shearValue : 0.5;
   const group = new THREE.Group();
   console.log("shearValue", shearValue);
   // スケール調整

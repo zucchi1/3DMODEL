@@ -1,48 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { useThreeRenderer } from "./rendering/ThreeRenderer";
-import DownloadButton from "./buttons/DownloadButton";
-import GridButton from "./buttons/GridButton";
-import CameraPositionLogger from "./buttons/CameraPositionLogger";
-import ShearValueInput from "./buttons/ShearValueInput";
-import * as THREE from "three";
+import React, { useState, useEffect, useRef } from 'react';
+import { useThreeRenderer } from './rendering/ThreeRenderer';
+import DownloadButton from './buttons/DownloadButton';
+import GridButton from './buttons/GridButton';
+import CameraPositionLogger from './buttons/CameraPositionLogger';
 
-function SuggestModelViewer({ glbPath, caption }) {
-  const isModelVisible = true;
-  const [isGridVisible, setIsGridVisible] = useState(false);
-  const isOrbitControlsEnabled = false; // OrbitControlsを有効にするかどうかのフラグ
-
-  // Three.js Renderer Hook
-  const { renderer, scene, camera, isRendererReady} =
-    useThreeRenderer(glbPath, `canvas-${caption}`, isModelVisible, isGridVisible, isOrbitControlsEnabled);
+function SuggestModelViewer({ glbPath, imagePath, caption, canvasId, shearValue }) {
+  const isModelVisible=true;
+  const [isGridVisible, setIsGridVisible]=useState(false);
+  const canvasRef = useRef(null);
+  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, canvasId, isModelVisible , isGridVisible,true,shearValue);  // isModelVisibleを依存関係に追加
 
   useEffect(() => {
     if (!isModelVisible && renderer) {
+      // 3Dモデルが表示されていない時、レンダラーを停止してメモリリークを防ぐ
+      console.log("dispose");
       renderer.dispose();
     }
   }, [isModelVisible, renderer]);
 
+  useEffect(() => {
+    if (renderer && scene && camera && isRendererReady) {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.render(scene, camera);
+      }
+    }
+  }, [renderer, scene, camera, isRendererReady]);
+
   return (
     <div className="relative">
-      <canvas id={`canvas-${caption}`} className="w-full h-96"></canvas>
+      {isModelVisible ? (
+        <canvas id={canvasId} ref={canvasRef} className="w-full h-64"></canvas>
+      ) : (
+        <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-96 object-contain" />
+      )}
 
-      {/* シークバーと値表示 */}
-      <ShearValueInput/>
-
-      {/* モデル操作ボタン */}
+      {/* ボタンをフレックスボックスで水平に並べる */}
       <div className="flex justify-center space-x-4 mt-4">
+        {/* モデルが表示されている時だけ機能ボタンを表示 */}
         {isModelVisible && isRendererReady && (
           <>
-            <DownloadButton
-              renderer={renderer}
-              scene={scene}
-              camera={camera}
-              glbPath={glbPath}
-            />
-            <GridButton
-              isGridVisible={isGridVisible}
-              setIsGridVisible={setIsGridVisible}
-            />
-            <CameraPositionLogger camera={camera} />
+          <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath}/>
+          <GridButton
+            isGridVisible={isGridVisible}
+            setIsGridVisible={setIsGridVisible} />
+          <CameraPositionLogger camera={camera}/>
           </>
         )}
       </div>
