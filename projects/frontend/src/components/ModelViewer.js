@@ -4,12 +4,11 @@ import DownloadButton from './buttons/DownloadButton';
 import GridButton from './buttons/GridButton';
 import CameraPositionLogger from './buttons/CameraPositionLogger';
 
-function ModelViewer({ glbPath, imagePath, caption, canvasId }) {
-  const isModelVisible = true;
-  //const [isModelVisible, setIsModelVisible] = useState(true);
+function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue }) {
+  const isModelVisible=true;
   const [isGridVisible, setIsGridVisible]=useState(false);
   const canvasRef = useRef(null);
-  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, canvasId, isModelVisible , isGridVisible,);  // isModelVisibleを依存関係に追加
+  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, canvasId, isModelVisible , isGridVisible,true,shearValue);  // isModelVisibleを依存関係に追加
 
   useEffect(() => {
     if (!isModelVisible && renderer) {
@@ -34,15 +33,11 @@ function ModelViewer({ glbPath, imagePath, caption, canvasId }) {
       {isModelVisible ? (
         <canvas id={canvasId} ref={canvasRef} className="w-full h-64"></canvas>
       ) : (
-        <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-4 object-contain" />
+        <img src={imagePath} alt={`${caption}のデッサン`} className="w-full h-96 object-contain" />
       )}
 
       {/* ボタンをフレックスボックスで水平に並べる */}
       <div className="flex justify-center space-x-4 mt-4">
-        {/*<ToggleButton 
-          isModelVisible={isModelVisible} 
-          setIsModelVisible={setIsModelVisible} 
-        />*/}
         {/* モデルが表示されている時だけ機能ボタンを表示 */}
         {isModelVisible && isRendererReady && (
           <>

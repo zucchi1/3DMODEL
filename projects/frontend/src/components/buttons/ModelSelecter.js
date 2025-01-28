@@ -20,6 +20,7 @@ function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
         { value: 'plate1', label: 'plate1' },
         { value: 'model', label: 'model/正解のモデル' },
         { value: 'model1', label: 'model1/皿を丸く描いてしまう誤り' },
+        { value: 'model2', label: 'model2/皿を大きく描いてしまう誤り' },
         { value: 'model4', label: 'model4/グラスの上部を丸く描いてしまう誤り/断面間の誤り' },
         { value: 'model7', label: 'model7/グラスを傾けて描く誤り' },
         // Add more options as needed

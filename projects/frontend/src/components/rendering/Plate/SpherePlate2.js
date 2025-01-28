@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { CSG } from 'three-csg-ts';
 
-export function createPlate1(shearValue) {
+export function createPlate2(shearValue) {
   shearValue = shearValue !== undefined ? shearValue : 0.5;
   const group = new THREE.Group();
 
@@ -75,9 +75,9 @@ export function createPlate1(shearValue) {
   // せん断変形行列を作成
   const shearMatrix = new THREE.Matrix4();
   shearMatrix.set(
-    1,0,0,0, // X軸の変形
-    0,1,shearValue,0, // Y軸の変形 (ここがせん断)
-    0,0,1,0, // Z軸の変形
+    (0.8+shearValue),0,0,0, // X軸の変形，(0.9+shearValue)はマジックナンバー
+    0,(0.8+shearValue),0,0, // Y軸の変形 (ここがせん断)
+    0,0,1*(0.8+shearValue),0, // Z軸の変形
     0,0,0,1 // 平行移動
   );
 

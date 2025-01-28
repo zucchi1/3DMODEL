@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
-export function createGlass7() {
+export function createGlass7(shearValue) {
+  shearValue = shearValue !== undefined ? shearValue : 0.5;
   const group = new THREE.Group();
 
   // スケール調整
@@ -17,7 +18,7 @@ export function createGlass7() {
   // せん断変形の行列を作成
   const shearMatrix = new THREE.Matrix4();
   shearMatrix.set(
-    1,0.1,0,0, // X軸の変形
+    1,shearValue*0.5,0,0, // X軸の変形
     0,1,0,0, // Y軸の変形 (ここがせん断)
     0,0,1,0, // Z軸の変形
     0,0,0,1 // 平行移動

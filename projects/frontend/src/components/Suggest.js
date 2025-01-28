@@ -1,6 +1,5 @@
 // src/components/MainApp.js
 import React,{useState} from "react";
-import SuggestModelViewer from "./SuggestModelViewer";
 import ToHomeButton from "./buttons/ToHomeButton";
 import ToCorrectButton from "./buttons/ToCorrectButton";
 import ToMainAppButton from "./buttons/ToMainAppButton";
@@ -47,7 +46,7 @@ function Suggest() {
       shearValue={shearValue}
     />
     <h3>3Dモデル</h3>
-    <SuggestModelViewer
+    <ModelViewer
       glbPath={RightGlbPath} // plateを指定して丸皿モデルを表示
       caption="モチーフ+2"
       canvasId="ProcessModelCanvas" // 一意のIDを追加
