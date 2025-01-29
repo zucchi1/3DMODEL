@@ -32,9 +32,9 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate();
-      glass.position.set(-100, 0, 0);
+      glass.position.set(-250, 0, 100);
       group.add(glass);
-      plate.position.set(100, 0, 0);
+      plate.position.set(0, 0, 0);
       group.add(plate);
       return group;
     }
@@ -42,9 +42,9 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate1(shareValue);
-      glass.position.set(-100, 0, 0);
+      glass.position.set(-250, 0, 100);
       group.add(glass);
-      plate.position.set(100, 0, 0);
+      plate.position.set(0, 0, 0);
       group.add(plate);
       return group;
     }
@@ -52,31 +52,51 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate2(shareValue);
-      glass.position.set(-100, 0, 0);
+      glass.position.set(-250, 0, 100);
       group.add(glass);
-      plate.position.set(100, 0, 0);
+      plate.position.set(0, 0, 0);
       group.add(plate);
       return group;
+    }
+    case "model3": {
+      const cube = createCube();
+      cube.position.set(0, 0, 0);
+      return cube;
     }
     case "model4": {
       const group = new THREE.Group();
       const glass = createGlass4(shareValue);
       const plate = createPlate();
-      glass.position.set(-100, 61, 0);
+      glass.position.set(-250, 61, 100);
       group.add(glass);
-      plate.position.set(100, 0, 0);
+      plate.position.set(0, 0, 0);
       group.add(plate);
       return group;
+    }
+    case "model5": {
+      const cube = createCube();
+      cube.position.set(0, 0, 0);
+      return cube;
+    }
+    case "model6": {
+      const cube = createCube();
+      cube.position.set(0, 0, 0);
+      return cube;
     }
     case "model7": {
       const group = new THREE.Group();
       const glass = createGlass7(shareValue);
       const plate = createPlate();
-      glass.position.set(-100, 0, 0);
+      glass.position.set(-250, 0, 100);
       group.add(glass);
-      plate.position.set(100, 0, 0);
+      plate.position.set(0, 0, 0);
       group.add(plate);
       return group;
+    }
+    case "model8": {
+      const cube = createCube();
+      cube.position.set(0, 0, 0);
+      return cube;
     }
     default: {
       const loader = new GLTFLoader();

@@ -47,7 +47,7 @@ export function useThreeRenderer(
     // Camera setup
     const aspect = canvas.clientWidth / canvas.clientHeight;
     const camera = new PerspectiveCamera(45, aspect, 1, 10000);
-    camera.position.set(0, 70, -400);
+    camera.position.set(0, 70, -700);
     cameraRef.current = camera;
 
     const controls = new OrbitControls(camera, rendererInstance.domElement);
