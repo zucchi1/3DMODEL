@@ -6,9 +6,10 @@ import ToHomeButton from "./buttons/ToHomeButton";
 import ToCorrectButton from "./buttons/ToCorrectButton";
 import ToSuggestButton from "./buttons/ToSuggestButton";
 import ModelSelecter from "./buttons/ModelSelecter";
+import ToSuggestButton2 from './buttons/ToSuggestButton2';
 
 function MainApp() {
-  const[RightGlbPath,setRightGlbPath] = useState("model7");
+  const[RightGlbPath,setRightGlbPath] = useState("model1");
   return (
     <div className="App">
       <h1 className="mb-4 text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -56,6 +57,7 @@ function MainApp() {
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
         <ToSuggestButton buttonText="修正過程を見る"/>
+        <ToSuggestButton2 buttonText="修正過程を少しずつ見る"/>
         <ModelSelecter 
         RightGlbPath={RightGlbPath}
         setRightGlbPath={setRightGlbPath} />

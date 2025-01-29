@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // ページ遷移用のフック
 
-function ToMainAppButton({ buttonText = "二次元画像との比較画面へ遷移"}) {  // 引数としてボタンのテキストを受け取る
+function ToMainAppButton2({ buttonText = "デッサンとの比較画面へ遷移"}) {  // 引数としてボタンのテキストを受け取る
     const navigate = useNavigate();  // navigate関数を取得
 
     const handleClick = () => {
-      navigate('/viewer');  // "viewer" パスに遷移
+      navigate('/viewer2');  // "viewer" パスに遷移
     };
 
   return (
@@ -18,4 +18,4 @@ function ToMainAppButton({ buttonText = "二次元画像との比較画面へ遷
   );
 }
 
-export default ToMainAppButton;
+export default ToMainAppButton2;
