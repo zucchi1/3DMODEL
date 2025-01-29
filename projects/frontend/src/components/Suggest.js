@@ -3,13 +3,14 @@ import React,{useState} from "react";
 import ToHomeButton from "./buttons/ToHomeButton";
 import ToCorrectButton from "./buttons/ToCorrectButton";
 import ToMainAppButton from "./buttons/ToMainAppButton";
+import ToMainApButton2 from "./buttons/ToMainAppButton2";
 import ModelSelecter from "./buttons/ModelSelecter";
 import DrawingViewer from "./DrawingViewer";
 import ModelViewer from "./ModelViewer";
 //import ShearValueInput from "./buttons/ShearValueInput";
 
 function Suggest() {
-  const[RightGlbPath,setRightGlbPath] = useState("model4");
+  const[RightGlbPath,setRightGlbPath] = useState("model1");
   //const[shearValue,setShearValue] = useState(0.35);
   const shearValue = 0.3;
   return (
@@ -79,6 +80,7 @@ function Suggest() {
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
         <ToMainAppButton/>
+        <ToMainApButton2/>
       </div>
     </div>
     
