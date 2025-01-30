@@ -16,7 +16,8 @@ export function useThreeRenderer(
   isModelVisible,
   isGridVisible,
   isOrbitControlsEnabled,
-  shearValue // シークバーの値
+  shearValue, // シークバーの値
+  cameraPosition // カメラ位置
 ) {
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
@@ -47,7 +48,11 @@ export function useThreeRenderer(
     // Camera setup
     const aspect = canvas.clientWidth / canvas.clientHeight;
     const camera = new PerspectiveCamera(45, aspect, 1, 10000);
-    camera.position.set(0, 70, -700);
+    if (cameraPosition) {
+      camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    } else {
+      camera.position.set(0, 70, -700);
+    }
     cameraRef.current = camera;
 
     const controls = new OrbitControls(camera, rendererInstance.domElement);
@@ -91,7 +96,7 @@ export function useThreeRenderer(
       rendererInstance.dispose();
       sceneInstance.clear();
     };
-  }, [canvasId, glbPath, isModelVisible, isGridVisible, isOrbitControlsEnabled, shearValue]);
+  }, [canvasId, glbPath, isModelVisible, isGridVisible, isOrbitControlsEnabled, shearValue, cameraPosition]);
 
   useEffect(() => {
     if (controlsRef.current) {
@@ -113,5 +118,5 @@ export function useThreeRenderer(
     });
   }, [shearValue, scene, glbPath]);
 
-  return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef};
+  return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef };
 }

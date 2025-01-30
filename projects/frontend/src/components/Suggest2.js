@@ -14,6 +14,7 @@ function Suggest2() {
   const[RightGlbPath,setRightGlbPath] = useState("model1");
   const[StepValue,setStepValue] = useState(0);
   //const[shearValue,setShearValue] = useState(0.35);
+  const[cameraPosition,setCameraPosition] = useState({ x: 0, y: 70, z: -700 });
   const shearValue = 0.3;
   return (
     <div className="App">
@@ -36,6 +37,7 @@ function Suggest2() {
             imagePath="./drawing/model1.png"
             caption="右"
             canvasId="rightModelCanvas" // 一意のIDを追加
+            cameraPosition={cameraPosition}
           />
         </div>
       )}
@@ -55,6 +57,7 @@ function Suggest2() {
           caption="モチーフ+2"
           canvasId="ProcessModelCanvas" // 一意のIDを追加
           shearValue={shearValue}
+          cameraPosition={cameraPosition}
         />
       </div>
       )}
@@ -73,6 +76,7 @@ function Suggest2() {
           imagePath="./drawing/model.png"
           caption="左"
           canvasId="leftModelCanvas" // 一意のIDを追加
+          cameraPosition={cameraPosition}
         />
       </div>
       )}
@@ -83,6 +87,8 @@ function Suggest2() {
     <PlayButton 
       StepValue={StepValue}
       setStepValue={setStepValue}
+      cameraPosition={cameraPosition}
+      setCameraPosition={setCameraPosition}
     />
     <ModelSelecter 
       RightGlbPath={RightGlbPath}
