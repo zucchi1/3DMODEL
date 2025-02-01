@@ -2,22 +2,17 @@ import React from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { useCamera } from '../../context/CameraContext'; // useCameraをインポート
 
-function PlayButton({ StepValue, setStepValue }) {
-    const { cameraPosition, setCameraPosition } = useCamera();
+function PlayButton({ StepValue , setStepValue,new_cameraPosition, setCameraPosition})  {
+    const { cameraPosition } = useCamera();
 
     const handleClick = () => {
         const newStepValue = (StepValue + 1) % 3; // 0, 1, 2の範囲で循環
         setStepValue(newStepValue);
-        if (newStepValue === 0) {
-            setCameraPosition({ x: 0, y: 70, z: -700 });
-        } else if (newStepValue === 1) {
-            setCameraPosition(cameraPosition);
-        } else if (newStepValue === 2) {
-            setCameraPosition(cameraPosition);
-        }
         console.log("Step was pushed");
         console.log("New Step Value:", newStepValue);
         console.log("Current Camera Position:", cameraPosition);
+        setCameraPosition(cameraPosition); // カメラ位置をリセット
+        console.log("Camera Position was reset",cameraPosition);
     };
 
     return (

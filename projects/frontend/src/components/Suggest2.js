@@ -15,11 +15,11 @@ function Suggest2() {
   const[StepValue,setStepValue] = useState(0);
   //const[shearValue,setShearValue] = useState(0.35);
   const[cameraPosition,setCameraPosition] = useState({ x: 0, y: 70, z: -700 });
-  const shearValue = 0.3;
+  const shearValue = 0.2;
   return (
     <div className="App">
       <h1 className="mb-4 text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-        Suggest2
+        Suggest2２
       </h1>
       <div className="flex justify-around mt-5">
       {StepValue === 0 && (
@@ -87,7 +87,7 @@ function Suggest2() {
     <PlayButton 
       StepValue={StepValue}
       setStepValue={setStepValue}
-      cameraPosition={cameraPosition}
+      new_cameraPosition={cameraPosition}
       setCameraPosition={setCameraPosition}
     />
     <ModelSelecter 

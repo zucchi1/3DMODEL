@@ -9,6 +9,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { useEffect, useState, useRef } from "react";
 import { addDirectionalLight, addGrid, addAxes } from "../helpers/SceneHelpers";
 import { loadModel } from "../helpers/ModelLoader";
+import { useCamera } from '../../context/CameraContext'; // useCameraをインポート
 
 export function useThreeRenderer(
   glbPath,
@@ -19,6 +20,7 @@ export function useThreeRenderer(
   shearValue, // シークバーの値
   cameraPosition // カメラ位置
 ) {
+  const { setCameraPosition } = useCamera(); // setCameraPositionを取得
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
   const isRendererReady = useRef(false);
@@ -26,7 +28,7 @@ export function useThreeRenderer(
   const cameraRef = useRef(null); // カメラを保持
   const controlsRef = useRef(null); // OrbitControlsを保持
   const modelRef = useRef(null); // 現在のモデルを保持
-  console.log("isOrbitControlsEnabled", isOrbitControlsEnabled);
+
   useEffect(() => {
     if (!isModelVisible) return;
 
@@ -58,6 +60,15 @@ export function useThreeRenderer(
     const controls = new OrbitControls(camera, rendererInstance.domElement);
     controls.enabled = isOrbitControlsEnabled; // ここで有効/無効を設定
     controlsRef.current = controls;
+
+    // カメラ位置が変更されたときにCameraContextを更新
+    controls.addEventListener('change', () => {
+      setCameraPosition({
+        x: camera.position.x,
+        y: camera.position.y,
+        z: camera.position.z,
+      });
+    });
 
     // Lighting setup
     addDirectionalLight(sceneInstance);
@@ -96,7 +107,7 @@ export function useThreeRenderer(
       rendererInstance.dispose();
       sceneInstance.clear();
     };
-  }, [canvasId, glbPath, isModelVisible, isGridVisible, isOrbitControlsEnabled, shearValue, cameraPosition]);
+  }, [canvasId, glbPath, isModelVisible, isGridVisible, isOrbitControlsEnabled, shearValue, cameraPosition, setCameraPosition]);
 
   useEffect(() => {
     if (controlsRef.current) {
@@ -117,6 +128,13 @@ export function useThreeRenderer(
       }
     });
   }, [shearValue, scene, glbPath]);
+
+  useEffect(() => {
+    if (cameraRef.current && cameraPosition) {
+      cameraRef.current.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+      setCameraPosition(cameraPosition); // カメラ位置を更新
+    }
+  }, [cameraPosition, setCameraPosition]);
 
   return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef };
 }
