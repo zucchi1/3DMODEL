@@ -32,7 +32,7 @@ function MainApp2() {
         {/* 右側の丸皿モデル */}
           <div className="w-1/2 flex flex-col items-center">
             <h2 className="text-xl font-extrabold mb-2">誤り</h2>
-            <h3>貴方のデッサン</h3>
+            <h3>あなたのデッサン</h3>
             <img src="./drawing/drawingEx1.jpg" alt="モチーフ" className="w-full h-48 object-contain" />
             <h3>3Dモデル</h3>
             <ModelViewer

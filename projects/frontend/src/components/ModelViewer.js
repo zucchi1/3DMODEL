@@ -4,11 +4,11 @@ import DownloadButton from './buttons/DownloadButton';
 import GridButton from './buttons/GridButton';
 import CameraPositionLogger from './buttons/CameraPositionLogger';
 
-function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue }) {
-  const isModelVisible=true;
-  const [isGridVisible, setIsGridVisible]=useState(false);
+function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue, cameraPosition }) {
+  const isModelVisible = true;
+  const [isGridVisible, setIsGridVisible] = useState(false);
   const canvasRef = useRef(null);
-  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, canvasId, isModelVisible , isGridVisible,true,shearValue);  // isModelVisibleを依存関係に追加
+  const { renderer, scene, camera, isRendererReady } = useThreeRenderer(glbPath, canvasId, isModelVisible, isGridVisible, true, shearValue, cameraPosition);
 
   useEffect(() => {
     if (!isModelVisible && renderer) {
@@ -41,11 +41,11 @@ function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue }) {
         {/* モデルが表示されている時だけ機能ボタンを表示 */}
         {isModelVisible && isRendererReady && (
           <>
-          <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath}/>
-          <GridButton
-            isGridVisible={isGridVisible}
-            setIsGridVisible={setIsGridVisible} />
-          <CameraPositionLogger camera={camera}/>
+            <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath} />
+            <GridButton
+              isGridVisible={isGridVisible}
+              setIsGridVisible={setIsGridVisible} />
+            <CameraPositionLogger camera={camera} />
           </>
         )}
       </div>

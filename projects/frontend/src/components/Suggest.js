@@ -7,11 +7,14 @@ import ToMainApButton2 from "./buttons/ToMainAppButton2";
 import ModelSelecter from "./buttons/ModelSelecter";
 import DrawingViewer from "./DrawingViewer";
 import ModelViewer from "./ModelViewer";
+import { cameraPosition } from "three/src/nodes/TSL.js";
 //import ShearValueInput from "./buttons/ShearValueInput";
 
 function Suggest() {
   const[RightGlbPath,setRightGlbPath] = useState("model1");
   //const[shearValue,setShearValue] = useState(0.35);
+  //const[cameraPosition,setCameraPosition] = useState({ x: 0, y: 70, z: -700 });
+  cameraPosition = { x: 0, y: 70, z: -700 };
   const shearValue = 0.3;
   return (
     <div className="App">
@@ -34,6 +37,7 @@ function Suggest() {
       imagePath="./drawing/model.png"
       caption="左"
       canvasId="leftModelCanvas" // 一意のIDを追加
+      cameraPosition={cameraPosition}
     />
   </div>
   {/* 中間のモデル */}
@@ -52,6 +56,7 @@ function Suggest() {
       caption="モチーフ+2"
       canvasId="ProcessModelCanvas" // 一意のIDを追加
       shearValue={shearValue}
+      cameraPosition={cameraPosition}
     />
   </div>
   {/* 右側の誤りモデル */}
@@ -69,6 +74,7 @@ function Suggest() {
       imagePath="./drawing/model1.png"
       caption="右"
       canvasId="rightModelCanvas" // 一意のIDを追加
+      cameraPosition={cameraPosition}
     />
   </div>
 </div>

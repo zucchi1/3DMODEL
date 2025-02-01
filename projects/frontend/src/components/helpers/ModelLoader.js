@@ -10,7 +10,7 @@ import { createGlass7 } from "../rendering/Glass/Glass7";
 
 export async function loadModel(glbPath,sceneInstance, shareValue) {
   if (!glbPath) return createCube();
-  console.log("shareValue", shareValue);
+ // console.log("shareValue", shareValue);
 
   switch (glbPath) {
     case "plate": {
