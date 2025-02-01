@@ -34,6 +34,7 @@ function Suggest() {
       imagePath="./drawing/model.png"
       caption="左"
       canvasId="leftModelCanvas" // 一意のIDを追加
+      cameraPosition={{ x: -600, y: 70, z: 0 }}
     />
   </div>
   {/* 中間のモデル */}
@@ -52,6 +53,7 @@ function Suggest() {
       caption="モチーフ+2"
       canvasId="ProcessModelCanvas" // 一意のIDを追加
       shearValue={shearValue}
+      cameraPosition={{ x: -600, y: 70, z: 0 }}
     />
   </div>
   {/* 右側の誤りモデル */}
@@ -69,6 +71,7 @@ function Suggest() {
       imagePath="./drawing/model1.png"
       caption="右"
       canvasId="rightModelCanvas" // 一意のIDを追加
+      cameraPosition={{ x: -600, y: 70, z: 0 }}
     />
   </div>
 </div>
