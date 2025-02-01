@@ -1,17 +1,18 @@
 import React from 'react';
 import captureScreen from '../../utils/capture';
+import { primaryButtonStyle } from './styles/buttonStyles'; // スタイルをインポート
 
-function DownloadButton({ renderer, scene, camera,glbPath}) {
+function DownloadButton({ renderer, scene, camera, glbPath }) {
   const handleClick = () => {
     if (renderer && scene && camera) {
-      captureScreen(renderer, scene, camera,glbPath);
+      captureScreen(renderer, scene, camera, glbPath);
     }
   };
 
   return (
     <button
       onClick={handleClick}
-      className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-700"
+      className={primaryButtonStyle}  // スタイルを適用
     >
       2D画像をDLする
     </button>

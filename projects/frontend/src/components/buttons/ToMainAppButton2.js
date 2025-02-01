@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // ページ遷移用のフック
+import { primaryButtonStyle } from './styles/buttonStyles'; // スタイルをインポート
 
 function ToMainAppButton2({ buttonText = "デッサンとの比較画面へ遷移"}) {  // 引数としてボタンのテキストを受け取る
     const navigate = useNavigate();  // navigate関数を取得
@@ -11,7 +12,7 @@ function ToMainAppButton2({ buttonText = "デッサンとの比較画面へ遷�
   return (
     <button
       onClick={handleClick}
-      className="bg-yellow-500 text-white px-4 py-2 rounded shadow-md hover:bg-yellow-700"
+      className={primaryButtonStyle}  // スタイルを適用
     >
         {buttonText}  {/* 引数で受け取ったテキストを表示 */}
     </button>
