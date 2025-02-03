@@ -26,6 +26,7 @@ function MainApp2() {
             imagePath="./drawing/model.png"
             caption="左"
             canvasId="leftModelCanvas" // 一意のIDを追加
+           // cameraPosition={{ x: -500, y: 0, z: 0 }}
           />
         </div>
 
@@ -40,6 +41,7 @@ function MainApp2() {
             imagePath="./drawing/model1.png"
             caption="右"
             canvasId="rightModelCanvas" // 一意のIDを追加
+           // cameraPosition={{ x: -500, y: 0, z: 0 }}
            />
             
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { smallButtonStyle } from './styles/buttonStyles'; // スタイルをインポート
 
 function GridButton({ isGridVisible, setIsGridVisible }) {
     const handleClick = () => {
@@ -8,11 +8,10 @@ function GridButton({ isGridVisible, setIsGridVisible }) {
         console.log(isGridVisible);
       };
 
-
   return (
     <button
       onClick={handleClick}
-      className="bg-yellow-500 text-white px-4 py-2 rounded shadow-md hover:bg-yellow-700"
+      className={smallButtonStyle}  // スタイルを適用
     >
       {isGridVisible ? 'グリッドを消す' : 'グリッドを表示する'}
     </button>
