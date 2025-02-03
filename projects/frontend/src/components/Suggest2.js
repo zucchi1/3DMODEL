@@ -13,7 +13,7 @@ function Suggest2() {
   const [RightGlbPath, setRightGlbPath] = useState("model1");
   const [StepValue, setStepValue] = useState(0);
   //const [shearValue, setShearValue] = useState(0.35);
-  const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 70, z: -700 });
+  const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 125, z: -485 });
   const shearValue = 0.2;
 
   const stepLabels = ["誤り", "中間", "モチーフ"];

@@ -32,7 +32,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate();
-      glass.position.set(-250, 0, 100);
+      glass.position.set(-125, 0, 100);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -42,7 +42,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate1(shareValue);
-      glass.position.set(-250, 0, 100);
+      glass.position.set(-125, 0, 100);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -52,7 +52,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate2(shareValue);
-      glass.position.set(-250, 0, 100);
+      glass.position.set(-125, 0, 100);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -67,7 +67,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass4(shareValue);
       const plate = createPlate();
-      glass.position.set(-250, 61, 100);
+      glass.position.set(-125, 61, 100);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -75,7 +75,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
     }
     case "model5": {
       const cube = createCube();
-      cube.position.set(0, 0, 0);
+      cube.position.set(-125, 0, 0);
       return cube;
     }
     case "model6": {
@@ -87,7 +87,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass7(shareValue);
       const plate = createPlate();
-      glass.position.set(-250, 0, 100);
+      glass.position.set(-125, 0, 100);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);

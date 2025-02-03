@@ -10,7 +10,7 @@ import ModelViewer from "./ModelViewer";
 
 function Suggest() {
   const [RightGlbPath, setRightGlbPath] = useState("model1");
-  const [cameraPosition] = useState({ x: 0, y: 70, z: -700 }); // setCameraPositionを削除
+  const [cameraPosition] = useState({ x: 0, y: 125, z: -485 }); // setCameraPositionを削除
   const shearValue = 0.3;
 
   return (

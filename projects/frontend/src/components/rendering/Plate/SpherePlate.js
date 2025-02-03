@@ -9,9 +9,9 @@ export function createPlate() {
 
   // メイン部分の設定 (中央からリムまで滑らかに上がる)
   const plateGeometry = new THREE.CylinderGeometry(
-    16.5 * scaleFactor,
-    12.5 * scaleFactor,
-    3.3 * scaleFactor,
+    8.25 * scaleFactor,
+    6.25 * scaleFactor,
+    1.7 * scaleFactor,
     64,
     1,
     false
@@ -21,22 +21,22 @@ export function createPlate() {
     shininess: 60,
   }); // 白い色と光沢
   const plateMesh = new THREE.Mesh(plateGeometry, plateMaterial);
-  plateMesh.position.y = 1.75 * scaleFactor;
+  plateMesh.position.y = 1 * scaleFactor;
   group.add(plateMesh);
 
   // リム（皿の外縁に自然なカーブを追加）
   const rimGeometry = new THREE.CylinderGeometry(
-    24.0 * scaleFactor,
-    16.5 * scaleFactor,
-    1.0 * scaleFactor,
+    12.0 * scaleFactor,
+    8.25 * scaleFactor,
+    1.5 * scaleFactor,
     64,
     1,
     true
   );
   const rimGeometry_trans = new THREE.CylinderGeometry(
-    23.5 * scaleFactor,
-    16.0 * scaleFactor,
-    1.0 * scaleFactor,
+    11.75 * scaleFactor,
+    8.0 * scaleFactor,
+    1.5 * scaleFactor,
     64,
     1,
     true
@@ -51,13 +51,13 @@ export function createPlate() {
     shininess: 70,
   }));
 
-  rimSubtractedMesh.position.y = 3.9 * scaleFactor;
+  rimSubtractedMesh.position.y = 2.6 * scaleFactor;
   group.add(rimSubtractedMesh);
 
   // 糸底（底部に滑らかに接続）
   const footGeometry = new THREE.CylinderGeometry(
-    10.0 * scaleFactor,
-    10.0 * scaleFactor,
+    5.0 * scaleFactor,
+    5.0 * scaleFactor,
     0.2 * scaleFactor,
     64,
     1,
