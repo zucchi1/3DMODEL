@@ -23,8 +23,7 @@ export function useThreeRenderer(
   const { setCameraPosition } = useCamera(); // setCameraPositionを取得
   const [renderer, setRenderer] = useState(null);
   const [scene, setScene] = useState(null);
-  const isRendererReady = useRef(false);
-
+  const [isRendererReady, setIsRendererReady] = useState(false);
   const cameraRef = useRef(null); // カメラを保持
   const controlsRef = useRef(null); // OrbitControlsを保持
   const modelRef = useRef(null); // 現在のモデルを保持
@@ -84,7 +83,7 @@ export function useThreeRenderer(
       if (model) {
         sceneInstance.add(model);
         modelRef.current = model; // モデルを保持
-        isRendererReady.current = true;
+        setIsRendererReady(true); // レンダラーが準備完了
       }
     });
 
@@ -136,5 +135,5 @@ export function useThreeRenderer(
     }
   }, [cameraPosition, setCameraPosition]);
 
-  return { renderer, scene, camera: cameraRef.current, isRendererReady: isRendererReady.current, controlsRef };
+  return { renderer, scene, camera: cameraRef.current, isRendererReady, controlsRef };
 }

@@ -6,7 +6,6 @@ import ToMainAppButton2 from "./buttons/ToMainAppButton2";
 import ModelSelecter from "./buttons/ModelSelecter";
 import DrawingViewer from "./DrawingViewer";
 import ModelViewer from "./ModelViewer";
-//import ShearValueInput from "./buttons/ShearValueInput";
 
 function Suggest() {
   const [RightGlbPath, setRightGlbPath] = useState("model1");
