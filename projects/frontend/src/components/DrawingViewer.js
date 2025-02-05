@@ -59,7 +59,7 @@ function DrawingViewer({ glbPath, caption, canvasId, shearValue }) {
 
   return (
     <div className="relative">
-      <canvas id={canvasId} ref={canvasRef} className="w-full h-48"></canvas>
+      {!processedImageUrl && <canvas id={canvasId} ref={canvasRef} className="w-full h-48" style={{visibility: 'hidden'}}></canvas>}
       {processedImageUrl && <img src={processedImageUrl} alt="Processed" />}
     </div>
   );
