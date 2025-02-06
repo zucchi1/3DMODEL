@@ -32,7 +32,7 @@ function DrawingViewer({ glbPath, caption, canvasId, shearValue }) {
         formData.append('file', blob);
 
         try {
-          const uploadResponse = await fetch('http://localhost:5000/upload', {
+          const uploadResponse = await fetch('http://10.30.45.103:5000/upload', { // ここを変更
             method: 'POST',
             body: formData,
           });

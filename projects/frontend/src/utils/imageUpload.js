@@ -1,3 +1,4 @@
+//使わない
 import React, { useState } from 'react';
 
 function ImageUpload() {
@@ -13,7 +14,7 @@ function ImageUpload() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('http://localhost:5000/upload', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload`, {
         method: 'POST',
         body: formData,
       });
