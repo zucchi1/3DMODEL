@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
-function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
+function ModelSelecter({ RightGlbPath, setRightGlbPath }) {
     const [selectedOption, setSelectedOption] = useState(null);
 
     const handleModelChange = (selectedOption) => {
@@ -12,7 +12,7 @@ function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
         if (selectedOption) {
             console.log("changed");
             setRightGlbPath(selectedOption.value);
-            console.log("changed model"+RightGlbPath);
+            console.log("changed model" + RightGlbPath);
         }
     };
 
@@ -30,16 +30,37 @@ function ModelSelecter({ RightGlbPath,setRightGlbPath }) {
         // Add more options as needed
     ];
 
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            width: 300, // 一定の幅を設定
+            minWidth: 300,
+            maxWidth: 300
+        }),
+        menu: (provided) => ({
+            ...provided,
+            width: 300, // 一定の幅を設定
+            minWidth: 300,
+            maxWidth: 300
+        })
+    };
+
     return (
-        <div>
+        <div className="flex flex-col space-y-4">
             <Select
                 value={selectedOption}
                 onChange={handleModelChange}
                 options={options}
-                placeholder="Select a model　　　　　　　　　"
+                placeholder="Select a model"
+                styles={customStyles}
+                className="w-full max-w-md"
             />
-            <button onClick={handleLoadModel}
-            className="bg-gray-200 text-gray px-4 py-2 rounded shadow-md hover:bg-gray-100">Load Model</button>
+            <button
+                onClick={handleLoadModel}
+                className="bg-zinc-500 text-white px-4 py-2 rounded shadow-md hover:bg-zinc-400 transition duration-300"
+            >
+                Load Model
+            </button>
         </div>
     );
 }

@@ -25,15 +25,15 @@ function Suggest2() {
       </h1>
       <div className="flex justify-around mt-5">
         {StepValue === 0 && (
-          <div className="w-1/3 flex flex-col items-center">
+          <div className="w-full md:w-1/3 flex flex-col items-center bg-white p-5 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             <h2 className="text-xl font-extrabold mb-2">誤り</h2>
-            <h3>デッサン</h3>
+            <h3 className="text-lg font-semibold mb-2">デッサン</h3>
             <DrawingViewer
               glbPath={RightGlbPath}
               caption="右"
               canvasId="rightDrawingCanvas" // 一意のIDを追加
             />
-            <h3>3Dモデル</h3>
+            <h3 className="text-lg font-semibold mt-4 mb-2">3Dモデル</h3>
             <ModelViewer
               glbPath={RightGlbPath}
               imagePath="./drawing/model1.png"
@@ -44,16 +44,16 @@ function Suggest2() {
           </div>
         )}
         {StepValue === 1 && (
-          <div className="w-1/3 flex flex-col items-center">
+          <div className="w-full md:w-1/3 flex flex-col items-center bg-white p-5 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             <h2 className="text-xl font-extrabold mb-2">中間</h2>
-            <h3>デッサン</h3>
+            <h3 className="text-lg font-semibold mb-2">デッサン</h3>
             <DrawingViewer
               glbPath={RightGlbPath}
               caption="中間"
               canvasId="ProcessDrawingCanvas" // 一意のIDを追加
               shearValue={shearValue}
             />
-            <h3>3Dモデル</h3>
+            <h3 className="text-lg font-semibold mt-4 mb-2">3Dモデル</h3>
             <ModelViewer
               glbPath={RightGlbPath} // plateを指定して丸皿モデルを表示
               caption="モチーフ+2"
@@ -64,15 +64,15 @@ function Suggest2() {
           </div>
         )}
         {StepValue === 2 && (
-          <div className="w-1/3 flex flex-col items-center">
+          <div className="w-full md:w-1/3 flex flex-col items-center bg-white p-5 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             <h2 className="text-xl font-extrabold mb-2">モチーフ</h2>
-            <h3>デッサン</h3>
+            <h3 className="text-lg font-semibold mb-2">デッサン</h3>
             <DrawingViewer
               glbPath="model"
               caption="左"
               canvasId="leftDrawingCanvas" // 一意のIDを追加
             />
-            <h3>3Dモデル</h3>
+            <h3 className="text-lg font-semibold mt-4 mb-2">3Dモデル</h3>
             <ModelViewer
               glbPath="model"
               imagePath="./drawing/model.png"
@@ -95,8 +95,7 @@ function Suggest2() {
           RightGlbPath={RightGlbPath}
           setRightGlbPath={setRightGlbPath}
         />
-      </div>
-      <div className="flex justify-center mb-10 space-x-4">
+       <br />
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
         <ToMainAppButton />
