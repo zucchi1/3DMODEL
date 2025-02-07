@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useThreeRenderer } from './rendering/ThreeRenderer';
-import DownloadButton from './buttons/DownloadButton';
+//import DownloadButton from './buttons/DownloadButton';
 import GridButton from './buttons/GridButton';
-import CameraPositionLogger from './buttons/CameraPositionLogger';
+//port CameraPositionLogger from './buttons/CameraPositionLogger';
 
 function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue, cameraPosition }) {
   const isModelVisible = true;
@@ -38,16 +38,19 @@ function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue, camera
 
       {/* ボタンをフレックスボックスで水平に並べる */}
       <div className="flex justify-center space-x-4 mt-4">
-        {/* モデルが表示されている時だけ機能ボタンを表示 */}
+        
         {isModelVisible && isRendererReady && (
-          <>
-            <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath} />
-            <GridButton
+          <><GridButton
               isGridVisible={isGridVisible}
               setIsGridVisible={setIsGridVisible} />
+          {/*
+            <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath} />
+            
             <CameraPositionLogger camera={camera} />
-          </>
+          */}</>
+          
         )}
+        
       </div>
     </div>
   );

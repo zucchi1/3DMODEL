@@ -1,11 +1,8 @@
 import * as THREE from "three";
 import { CSG } from 'three-csg-ts';
 
-export function createPlate() {
+export function createPlateGroup(scaleFactor) {
   const group = new THREE.Group();
-
-  // スケール調整
-  const scaleFactor = 10;
 
   // メイン部分の設定 (中央からリムまで滑らかに上がる)
   const plateGeometry = new THREE.CylinderGeometry(
@@ -70,6 +67,13 @@ export function createPlate() {
   const footMesh = new THREE.Mesh(footGeometry, footMaterial);
   footMesh.position.y = 0.1 * scaleFactor;
   group.add(footMesh);
+
+  return group;
+}
+
+export function createPlate() {
+  const scaleFactor = 10;
+  const group = createPlateGroup(scaleFactor);
 
   // 環境光とスポットライトを追加してリアルに照らす
   const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // 環境光

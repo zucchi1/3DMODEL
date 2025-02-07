@@ -52,7 +52,7 @@ export function useThreeRenderer(
     if (cameraPosition) {
       camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
     } else {
-      camera.position.set(0, 125, -485);
+      camera.position.set(0, 185, -485);
     }
     cameraRef.current = camera;
 

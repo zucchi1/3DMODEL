@@ -10,7 +10,7 @@ import ToMainAppButton2 from "./buttons/ToMainAppButton2";
 //import ShearValueInput from "./buttons/ShearValueInput";
 
 function Suggest2() {
-  const [RightGlbPath, setRightGlbPath] = useState("model1");
+  const [RightGlbPath, setRightGlbPath] = useState("model2");
   const [StepValue, setStepValue] = useState(0);
   //const [shearValue, setShearValue] = useState(0.35);
   const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 125, z: -485 });
@@ -91,11 +91,14 @@ function Suggest2() {
           setCameraPosition={setCameraPosition}
           stepLabels={stepLabels}
         />
+      </div>
+      <div className="flex justify-center mt-10 space-x-4">
         <ModelSelecter
           RightGlbPath={RightGlbPath}
           setRightGlbPath={setRightGlbPath}
         />
-       <br />
+      </div>
+      <div className="flex justify-center mt-10 space-x-4">
         <ToHomeButton buttonText="Home画面に戻る" />
         <ToCorrectButton buttonText="誤りに気が付いた" />
         <ToMainAppButton />
