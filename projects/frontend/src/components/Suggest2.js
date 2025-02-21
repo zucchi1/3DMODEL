@@ -13,7 +13,7 @@ function Suggest2() {
   const [RightGlbPath, setRightGlbPath] = useState("model2");
   const [StepValue, setStepValue] = useState(0);
   //const [shearValue, setShearValue] = useState(0.35);
-  const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 125, z: -485 });
+  const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 185, z: -485 });
   const shearValue = 0.2;
 
   const stepLabels = ["誤り", "中間", "モチーフ"];
@@ -74,12 +74,12 @@ function Suggest2() {
             />
             <h3 className="text-lg font-semibold mt-4 mb-2">3Dモデル</h3>
             <ModelViewer
-              glbPath="model"
-              imagePath="./drawing/model.png"
+              glbPath="model"//ほんとにモデル？
               caption="左"
               canvasId="leftModelCanvas" // 一意のIDを追加
               cameraPosition={cameraPosition}
             />
+
           </div>
         )}
       </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useThreeRenderer } from './rendering/ThreeRenderer';
 //import DownloadButton from './buttons/DownloadButton';
 import GridButton from './buttons/GridButton';
-//port CameraPositionLogger from './buttons/CameraPositionLogger';
+import CameraPositionLogger from './buttons/CameraPositionLogger';
 
 function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue, cameraPosition }) {
   const isModelVisible = true;
@@ -45,9 +45,9 @@ function ModelViewer({ glbPath, imagePath, caption, canvasId, shearValue, camera
               setIsGridVisible={setIsGridVisible} />
           {/*
             <DownloadButton renderer={renderer} scene={scene} camera={camera} glbPath={glbPath} />
-            
+            */} 
             <CameraPositionLogger camera={camera} />
-          */}</>
+         </>
           
         )}
         

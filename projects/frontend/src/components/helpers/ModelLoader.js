@@ -33,7 +33,8 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate();
-      glass.position.set(-125, 0, 90);
+      glass.position.set(-145, 0, 55);
+      //デフォルトの位置-125, 0, 90
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -43,7 +44,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass();
       const plate = createPlate1(shareValue);
-      glass.position.set(-125, 0, 90);
+      glass.position.set(-145, 0, 55);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -53,7 +54,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass2(shareValue);
       const plate = createPlate2(shareValue);
-      glass.position.set(-125, 0, 90);
+      glass.position.set(-145, 0, 55);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
@@ -88,7 +89,7 @@ export async function loadModel(glbPath,sceneInstance, shareValue) {
       const group = new THREE.Group();
       const glass = createGlass7(shareValue);
       const plate = createPlate();
-      glass.position.set(-125, 0, 100);
+      glass.position.set(-145, 0, 55);
       group.add(glass);
       plate.position.set(0, 0, 0);
       group.add(plate);
