@@ -36,13 +36,21 @@ def upload_file():
 
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filepath)
-        # 画像処理（Canny法によるエッジ検出）
+        # 画像ファイルをそのまま返す
         image = Image.open(filepath).convert('L')
         image_np = np.array(image)
-        edges = cv2.Canny(image_np, 5, 20)
-        # 黒白反転
-        inverted_edges = cv2.bitwise_not(edges)
-        edge_image = Image.fromarray(inverted_edges)
+
+        # 局所的二値化（適応的閾値処理）
+        binary = cv2.adaptiveThreshold(
+            image_np,
+            255,
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,  # または cv2.ADAPTIVE_THRESH_MEAN_C
+            cv2.THRESH_BINARY,
+            11,   # ブロックサイズ（奇数、例: 11）
+            2     # 定数C（調整可能）
+        )
+
+        edge_image = Image.fromarray(binary)
         img_io = io.BytesIO()
         edge_image.save(img_io, 'PNG')
         img_io.seek(0)

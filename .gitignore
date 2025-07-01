@@ -1,4 +1,37 @@
 node_modules
 /projects/frontend/node_modules/
 /projects/backend/node_modules/
-/projects/backend/static/
+/projects/backend/static/# node_modules（全体）
+node_modules/
+projects/frontend/node_modules/
+projects/backend/node_modules/
+
+# Python仮想環境
+venv/
+env/
+projects/backend/venv/
+projects/backend/env/
+
+# Pythonキャッシュ
+__pycache__/
+*.pyc
+
+# .envファイル（環境変数など機密情報）
+.env
+projects/frontend/.env
+projects/backend/.env
+
+# ログ・一時ファイル
+*.log
+*.tmp
+
+# OS・エディタ固有ファイル
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 静的ファイルやビルド成果物
+projects/backend/static/
+projects/frontend/build/
+projects/frontend/dist/

@@ -34,7 +34,7 @@ function ImageUpload() {
     <div className="flex flex-col items-center space-y-4 p-4 bg-white rounded shadow-md w-full max-w-xs">
       <input
         type="file"
-        accept="image/*"
+        accept="image/png, image/jpeg" // 画像ファイルのみを受け入れる
         onChange={handleFileChange}
         className="block w-full text-sm text-gray-700 border border-gray-300 rounded cursor-pointer focus:outline-none"
       />
