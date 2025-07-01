@@ -47,6 +47,36 @@ def upload_file():
         edge_image.save(img_io, 'PNG')
         img_io.seek(0)
         return send_file(img_io, mimetype='image/png')
+    
+@app.route('/reverse', methods=['POST'])
+def drawing():
+    if 'file' not in request.files:
+        return jsonify(message='No file part'), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify(message='No selected file'), 400
+    if file:
+        try:
+            # 画像を開いて確認
+            image = Image.open(file)
+            image.verify()  # 画像が有効かどうかを確認
+            file.seek(0)  # ファイルポインタをリセット
+        except (IOError, SyntaxError) as e:
+            return jsonify(message=f'Invalid image file: {e}'), 400
+
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        # 画像処理（Canny法によるエッジ検出）
+        image = Image.open(filepath).convert('L')
+        image_np = np.array(image)
+        edges = cv2.Canny(image_np, 5, 20)
+        # 黒白反転
+        inverted_edges = cv2.bitwise_not(edges)
+        edge_image = Image.fromarray(inverted_edges)
+        img_io = io.BytesIO()
+        edge_image.save(img_io, 'PNG')
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png')
 
 if __name__ == '__main__':
     app.run(debug=True)

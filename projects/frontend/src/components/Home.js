@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // ページ遷移用のフック
+import Update from './Update';
+import ToUpdateButton from './buttons/ToUpdateButton';  // Updateボタンのコンポーネントをインポート
 
 function Home() {
   const navigate = useNavigate();  // navigate関数を取得
@@ -25,6 +27,7 @@ function Home() {
       >
         デッサンとの比較を行う
       </button>
+      <ToUpdateButton />  
     </div>
     
   );

@@ -32,7 +32,7 @@ function DrawingViewer({ glbPath, caption, canvasId, shearValue }) {
         formData.append('file', blob);
 
         try {
-          const uploadResponse = await fetch('http://localhost:5000/upload', {
+          const uploadResponse = await fetch('http://localhost:5000/reverse', {
             method: 'POST',
             body: formData,
           });
@@ -59,8 +59,11 @@ function DrawingViewer({ glbPath, caption, canvasId, shearValue }) {
 
   return (
     <div className="relative">
-      <canvas id={canvasId} ref={canvasRef} className="w-full h-48"></canvas>
-      {processedImageUrl && <img src={processedImageUrl} alt="Processed" />}
+      {!processedImageUrl ? (
+        <canvas id={canvasId} ref={canvasRef} className="w-full h-48"></canvas>
+      ) : (
+        <img src={processedImageUrl} alt="Processed" />
+      )}
     </div>
   );
 }

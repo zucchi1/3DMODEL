@@ -4,6 +4,7 @@ import './css/index.css';
 import MainApp from './components/MainApp';
 import MainApp2 from './components/MainApp2';
 import Home from './components/Home';
+import Update from './components/Update';
 import Correct from './components/Correct';
 import Suggest from './components/Suggest';
 import Suggest2 from './components/Suggest2';
@@ -17,6 +18,7 @@ root.render(
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/update" element={<Update />} />
           <Route path="/viewer" element={<MainApp />} />
           <Route path="/viewer2" element={<MainApp2 />} />
           <Route path="/correction" element={<Correct />} />

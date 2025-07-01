@@ -13,7 +13,7 @@ function ImageUpload() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload`, {
+      const response = await fetch('http://localhost:5000/upload', {
         method: 'POST',
         body: formData,
       });
@@ -31,10 +31,26 @@ function ImageUpload() {
   };
 
   return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
-      {imageUrl && <img src={imageUrl} alt="Uploaded" />}
+    <div className="flex flex-col items-center space-y-4 p-4 bg-white rounded shadow-md w-full max-w-xs">
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="block w-full text-sm text-gray-700 border border-gray-300 rounded cursor-pointer focus:outline-none"
+      />
+      <button
+        onClick={handleUpload}
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+      >
+        Upload
+      </button>
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt="Uploaded"
+          className="mt-4 max-w-full h-auto rounded border"
+        />
+      )}
     </div>
   );
 }

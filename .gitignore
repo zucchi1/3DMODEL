@@ -1,1 +1,4 @@
 node_modules
+/projects/frontend/node_modules
+/projects/backend/node_modules
+/projects/backend/static
