@@ -8,7 +8,7 @@ import cv2  # OpenCVをインポート
 import cv2.ximgproc as ximgproc # 現在のコードでは未使用ですが、念のため保持
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -119,7 +119,6 @@ def drawing():
     image = Image.open(filepath).convert('L')
     image_np = np.array(image)
     edges = cv2.Canny(image_np, 5, 20)
-    # 黒白反転
     inverted_edges = cv2.bitwise_not(edges)
     edge_image = Image.fromarray(inverted_edges)
     img_io = io.BytesIO()

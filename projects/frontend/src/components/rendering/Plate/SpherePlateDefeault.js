@@ -1,0 +1,41 @@
+export const SPHERE_PLATE_PARAMS = {
+  scaleFactor: 10,
+  plate: {
+    topRadius: 8.25,
+    bottomRadius: 6.25,
+    height: 3.0,
+    radialSegments: 64,
+    heightSegments: 1,
+    openEnded: false,
+    color: 0xdddddd,
+    shininess: 60,
+    yOffset: 0.2,
+  },
+  rim: {
+    topRadius: 12.0,
+    bottomRadius: 8.25,
+    height: 1.0,
+    radialSegments: 64,
+    heightSegments: 1,
+    openEnded: true,
+    color: 0xf0f0f0,
+    shininess: 70,
+    rimTransTopRadius: 11.75,
+    rimTransBottomRadius: 8.0,
+  },
+  foot: {
+    topRadius: 5.0,
+    bottomRadius: 5.0,
+    height: 0.2,
+    radialSegments: 64,
+    heightSegments: 1,
+    openEnded: false,
+    color: 0xdddddd,
+    shininess: 70,
+    yOffset: 0.1,
+  },
+  light: {
+    ambient: { color: 0x404040, intensity: 1.5 },
+    spot: { color: 0xffffff, intensity: 2, position: [0, 0, 0] },
+  }
+};

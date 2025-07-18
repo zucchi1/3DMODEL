@@ -1,91 +1,99 @@
 import * as THREE from "three";
 import { CSG } from 'three-csg-ts';
+import { SPHERE_PLATE_PARAMS } from "./SpherePlateDefeault";
 
 export function createPlate1(shearValue) {
   shearValue = shearValue !== undefined ? shearValue : 0.5;
   const group = new THREE.Group();
 
   // スケール調整
-  const scaleFactor = 10;
-  // メイン部分の設定 (中央からリムまで滑らかに上がる)
+  const scaleFactor = SPHERE_PLATE_PARAMS.scaleFactor;
+
+  // メイン部分の設定
   const plateGeometry = new THREE.CylinderGeometry(
-    8.25 * scaleFactor,
-    6.25 * scaleFactor,
-    1.7 * scaleFactor,
-    64,
-    1,
-    false
+    SPHERE_PLATE_PARAMS.plate.topRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.plate.bottomRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.plate.height * scaleFactor,
+    SPHERE_PLATE_PARAMS.plate.radialSegments,
+    SPHERE_PLATE_PARAMS.plate.heightSegments,
+    SPHERE_PLATE_PARAMS.plate.openEnded
   );
   const plateMaterial = new THREE.MeshPhongMaterial({
-    color: 0xdddddd,
-    shininess: 60,
-  }); // 白い色と光沢
+    color: SPHERE_PLATE_PARAMS.plate.color,
+    shininess: SPHERE_PLATE_PARAMS.plate.shininess,
+  });
   const plateMesh = new THREE.Mesh(plateGeometry, plateMaterial);
-  plateMesh.position.y = 1 * scaleFactor;
+  plateMesh.position.y = (SPHERE_PLATE_PARAMS.plate.yOffset + SPHERE_PLATE_PARAMS.plate.height / 2) * scaleFactor;
   group.add(plateMesh);
 
-  // リム（皿の外縁に自然なカーブを追加）
+  // リム
   const rimGeometry = new THREE.CylinderGeometry(
-    12.0 * scaleFactor,
-    8.25 * scaleFactor,
-    1.5 * scaleFactor,
-    64,
-    1,
-    true
+    SPHERE_PLATE_PARAMS.rim.topRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.rim.bottomRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.rim.height * scaleFactor,
+    SPHERE_PLATE_PARAMS.rim.radialSegments,
+    SPHERE_PLATE_PARAMS.rim.heightSegments,
+    SPHERE_PLATE_PARAMS.rim.openEnded
   );
   const rimGeometry_trans = new THREE.CylinderGeometry(
-    11.75 * scaleFactor,
-    8.0 * scaleFactor,
-    1.5 * scaleFactor,
-    64,
-    1,
-    true
+    SPHERE_PLATE_PARAMS.rim.rimTransTopRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.rim.rimTransBottomRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.rim.height * scaleFactor,
+    SPHERE_PLATE_PARAMS.rim.radialSegments,
+    SPHERE_PLATE_PARAMS.rim.heightSegments,
+    SPHERE_PLATE_PARAMS.rim.openEnded
   );
 
-  // ブール演算を使用してrimGeometryからrimGeometry_transの共通部分を削除
   const rimCSG = CSG.fromMesh(new THREE.Mesh(rimGeometry));
   const rimTransCSG = CSG.fromMesh(new THREE.Mesh(rimGeometry_trans));
   const rimSubtractedCSG = rimCSG.subtract(rimTransCSG);
   const rimSubtractedMesh = CSG.toMesh(rimSubtractedCSG, new THREE.Matrix4(), new THREE.MeshPhongMaterial({
-    color: 0xf0f0f0,
-    shininess: 70,
+    color: SPHERE_PLATE_PARAMS.rim.color,
+    shininess: SPHERE_PLATE_PARAMS.rim.shininess,
   }));
 
-  rimSubtractedMesh.position.y = 2.6 * scaleFactor;
+  rimSubtractedMesh.position.y = (SPHERE_PLATE_PARAMS.plate.height + SPHERE_PLATE_PARAMS.plate.yOffset + SPHERE_PLATE_PARAMS.rim.height / 2) * scaleFactor;
   group.add(rimSubtractedMesh);
 
-  // 糸底（底部に滑らかに接続）
+  // 糸底
   const footGeometry = new THREE.CylinderGeometry(
-    5.0 * scaleFactor,
-    5.0 * scaleFactor,
-    0.2 * scaleFactor,
-    64,
-    1,
-    false
+    SPHERE_PLATE_PARAMS.foot.topRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.foot.bottomRadius * scaleFactor,
+    SPHERE_PLATE_PARAMS.foot.height * scaleFactor,
+    SPHERE_PLATE_PARAMS.foot.radialSegments,
+    SPHERE_PLATE_PARAMS.foot.heightSegments,
+    SPHERE_PLATE_PARAMS.foot.openEnded
   );
   const footMaterial = new THREE.MeshPhongMaterial({
-    color: 0xdddddd,
-    shininess: 70,
+    color: SPHERE_PLATE_PARAMS.foot.color,
+    shininess: SPHERE_PLATE_PARAMS.foot.shininess,
   });
   const footMesh = new THREE.Mesh(footGeometry, footMaterial);
-  footMesh.position.y = 0.1 * scaleFactor;
+  footMesh.position.y = SPHERE_PLATE_PARAMS.foot.yOffset * scaleFactor;
   group.add(footMesh);
+
   // せん断変形行列を作成
   const shearMatrix = new THREE.Matrix4();
   shearMatrix.set(
-    1,0,0,0, // X軸の変形
-    0,1,shearValue,0, // Y軸の変形 (ここがせん断)
-    0,0,1,0, // Z軸の変形
-    0,0,0,1 // 平行移動
+    1, 0, 0, 0,
+    0, 1, shearValue, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
   );
-
-  // ジオメトリにせん断変形を適用
   group.applyMatrix4(shearMatrix);
 
-  // 環境光とスポットライトを追加してリアルに照らす
-  const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // 環境光
-  const spotLight = new THREE.SpotLight(0xffffff, 2);
-  spotLight.position.set(0 * scaleFactor, 0 * scaleFactor, 0 * scaleFactor);
+  // ライト
+  const ambientLight = new THREE.AmbientLight(
+    SPHERE_PLATE_PARAMS.light.ambient.color,
+    SPHERE_PLATE_PARAMS.light.ambient.intensity
+  );
+  const spotLight = new THREE.SpotLight(
+    SPHERE_PLATE_PARAMS.light.spot.color,
+    SPHERE_PLATE_PARAMS.light.spot.intensity
+  );
+  spotLight.position.set(
+    ...SPHERE_PLATE_PARAMS.light.spot.position.map(v => v * scaleFactor)
+  );
   spotLight.castShadow = true;
   group.add(ambientLight);
   group.add(spotLight);
