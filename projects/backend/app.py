@@ -34,6 +34,37 @@ def validate_and_save_file(file, upload_folder):
     filepath = os.path.join(upload_folder, file.filename)
     file.save(filepath)
     return filepath, None
+def detect_and_draw_ellipses(binary):
+    """
+    二値画像から輪郭検出・楕円フィッティングを行い、描画画像と楕円情報リストを返す
+    """
+    contours, hierarchy = cv2.findContours(binary.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    draw_image = cv2.cvtColor(binary, cv2.COLOR_GRAY2BGR)
+    detected_ellipses = []
+
+    for i, contour in enumerate(contours):
+        if len(contour) >= 5:
+            try:
+                ellipse = cv2.fitEllipse(contour)
+                (center_x, center_y), (major_axis_diameter, minor_axis_diameter), angle = ellipse
+                cv2.drawContours(draw_image, [contour], -1, (0, 0, 255), 2)
+                cv2.ellipse(draw_image, ellipse, (0, 0, 255), 2)
+                detected_ellipses.append({
+                    "contour_index": i,
+                    "center": (float(center_x), float(center_y)),
+                    "major_axis": float(major_axis_diameter),
+                    "minor_axis": float(minor_axis_diameter),
+                    "angle": float(angle),
+                    "area": float(cv2.contourArea(contour))
+                })
+            except cv2.error:
+                continue
+            except Exception:
+                continue
+
+    draw_image_rgb = cv2.cvtColor(draw_image, cv2.COLOR_BGR2RGB)
+    edge_image = Image.fromarray(draw_image_rgb)
+    return edge_image, detected_ellipses
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -48,83 +79,22 @@ def upload_file():
 
     # メディアンフィルタでノイズ除去 (グレースケール画像に適用)
     binary = cv2.medianBlur(binary, 3) # ksize=3
-
-    # (モルフォロジー処理は現在コメントアウトされているため省略)
+    binary = cv2.Canny(binary, 50, 70)  # Cannyエッジ検出
 
     # 局所的二値化（適応的閾値処理）
     binary = cv2.adaptiveThreshold(
         binary, # 前処理されたグレースケール画像が入力
         255,
-        cv2.ADAPTIVE_THRESH_MEAN_C, # 加重平均から平均に変更
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
         cv2.THRESH_BINARY,
         9,    # ブロックサイズ（奇数）
         -5    # 定数C（調整可能）
     )
+    kernel = np.ones((3, 3), np.uint8)
+    binary = cv2.dilate(binary, kernel, iterations=3)
+    # 輪郭検出と楕円フィッティング
+    edge_image, detected_ellipses = detect_and_draw_ellipses(binary)
 
-    # --- ここから輪郭検出とフィルタリング、楕円フィッティングの追加 ---
-
-        # 輪郭検出
-    # cv2.RETR_LIST は全ての輪郭を検出するので、まずはこれを使う
-    contours, hierarchy = cv2.findContours(binary.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-
-    # 描画用のカラー画像を準備
-    draw_image = cv2.cvtColor(binary, cv2.COLOR_GRAY2BGR)
-
-    detected_ellipses = [] # 検出された楕円の情報を格納するリスト
-
-    # 各輪郭をループしてフィルタリングと楕円フィッティングを行う
-    for i, contour in enumerate(contours):
-        # --- フィルタリングを一時的に緩める/削除 ---
-
-        # 面積によるフィルタリングを一時的に削除
-        # area = cv2.contourArea(contour)
-        # if area < 500 or area > (512 * 512 * 0.8): # 例: 500ピクセル未満、画像の80%以上の面積は除外
-        #     continue
-
-        # 楕円フィッティングの試行
-        if len(contour) >= 5: # 楕円フィッティングには最低5点が必要
-            try:
-                ellipse = cv2.fitEllipse(contour)
-                (center_x, center_y), (major_axis_diameter, minor_axis_diameter), angle = ellipse
-
-                # アスペクト比によるフィルタリングを一時的に削除
-                # if minor_axis_diameter == 0:
-                #     continue
-                # aspect_ratio = major_axis_diameter / minor_axis_diameter
-                # if aspect_ratio < 1.2 or aspect_ratio > 5.0: # この範囲はデッサンによって調整が必要
-                #     continue
-
-                # 楕円のサイズによるフィルタリングを一時的に削除
-                # if major_axis_diameter < 50 or major_axis_diameter > 400: # 適当な例
-                #     continue
-                
-                # フィルタを通過した輪郭を赤色で描画
-                # (0, 0, 255) は赤色です。以前のコードでは青色になっていましたが、ここでは視認性向上のため赤に統一。
-                cv2.drawContours(draw_image, [contour], -1, (0, 0, 255), 2) # 元の輪郭を赤色で描画
-                cv2.ellipse(draw_image, ellipse, (0, 0, 255), 2) # フィッティング楕円を赤色で描画
-
-                # 検出された楕円の情報を保存（フィルタリングが機能しているか確認用）
-                detected_ellipses.append({
-                    "contour_index": i,
-                    "center": (float(center_x), float(center_y)),
-                    "major_axis": float(major_axis_diameter),
-                    "minor_axis": float(minor_axis_diameter),
-                    "angle": float(angle),
-                    # "aspect_ratio": float(aspect_ratio), # フィルタ削除したのでコメントアウト
-                    "area": float(cv2.contourArea(contour)) # areaは常に計算しておく
-                })
-
-            except cv2.error as e:
-                # fitEllipseが失敗した場合
-                # print(f"Warning: Could not fit ellipse to contour {i}. Error: {e}")
-                continue
-            except Exception as e:
-                # その他のエラー
-                # print(f"An unexpected error occurred for contour {i}: {e}")
-                continue
-    # 描画した画像をPIL Imageに変換
-    draw_image_rgb = cv2.cvtColor(draw_image, cv2.COLOR_BGR2RGB)
-    edge_image = Image.fromarray(draw_image_rgb)
 
     img_io = io.BytesIO()
 
