@@ -6,6 +6,7 @@ import io
 from flask_cors import CORS
 import cv2  # OpenCVをインポート
 import cv2.ximgproc as ximgproc # 現在のコードでは未使用ですが、念のため保持
+import base64
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -103,12 +104,14 @@ def upload_file():
     edge_image.save(img_io, 'PNG')
 
     img_io.seek(0)
+     # 画像をbase64に変換
+    img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
 
-    # 検出された楕円の情報をJSONとして返すことも検討
-    # return jsonify(ellipses=detected_ellipses, image=base64_encoded_image) # 画像とデータを一緒に返す場合
-    
-    # 今回は輪郭描画画像のみを返す
-    return send_file(img_io, mimetype='image/png')
+    # JSONで楕円情報と画像データを返す
+    return jsonify({
+        "ellipses": detected_ellipses,
+        "image": img_base64
+    })
     
 @app.route('/reverse', methods=['POST'])
 def drawing():
@@ -125,6 +128,16 @@ def drawing():
     edge_image.save(img_io, 'PNG')
     img_io.seek(0)
     return send_file(img_io, mimetype='image/png')
+
+@app.route('/test', methods=['POST'])
+def test():
+    data = request.get_json()
+    if not data or 'a' not in data or 'b' not in data:
+        return jsonify(message='Invalid input'), 400
+    a = data['a']
+    b = data['b']
+    result = int(a) + int(b)
+    return jsonify(sum=result)
 
 if __name__ == '__main__':
     app.run(debug=True)

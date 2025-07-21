@@ -8,6 +8,7 @@ import Update from './components/Update';
 import Correct from './components/Correct';
 import Suggest from './components/Suggest';
 import Suggest2 from './components/Suggest2';
+import Test from './components/Test';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CameraProvider } from './context/CameraContext';
 
@@ -24,6 +25,7 @@ root.render(
           <Route path="/correction" element={<Correct />} />
           <Route path="/suggest" element={<Suggest />} />
           <Route path="/suggest2" element={<Suggest2 />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </Router>
     </CameraProvider>
