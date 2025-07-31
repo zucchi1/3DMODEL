@@ -20,6 +20,26 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 def index():
     return 'Flask Server'
 
+def binary_image_processing(binary,kernel_size=3, threshold1=50, threshold2=70,
+                            adaptive_block_size=9, adaptive_C=-5):
+    """パラメータを指定して画像を二値化する"""
+    # メディアンフィルタでノイズ除去 (グレースケール画像に適用)
+    binary = cv2.medianBlur(binary, kernel_size) # ksize=3
+    binary = cv2.Canny(binary, threshold1, threshold2)  # Cannyエッジ検出
+
+    # 局所的二値化（適応的閾値処理）
+    binary = cv2.adaptiveThreshold(
+        binary, # 前処理されたグレースケール画像が入力
+        255,
+        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY,
+        adaptive_block_size,    # ブロックサイズ（奇数）
+        adaptive_C    # 定数C（調整可能）
+    )
+    return binary
+
+
+
 def validate_and_save_file(file, upload_folder):
     """画像ファイルの検証と保存。失敗時はエラーレスポンスを返す。"""
     if not file:
@@ -66,6 +86,40 @@ def detect_and_draw_ellipses(binary):
     draw_image_rgb = cv2.cvtColor(draw_image, cv2.COLOR_BGR2RGB)
     edge_image = Image.fromarray(draw_image_rgb)
     return edge_image, detected_ellipses
+@app.route('/binary', methods=['POST'])
+def binary_image():
+    file = request.files.get('file')
+    filepath, error = validate_and_save_file(file, app.config['UPLOAD_FOLDER'])
+    if error:
+        return error
+    image = Image.open(filepath).convert('L')
+    image.thumbnail((512, 512), Image.LANCZOS)  # 縦横比を保って最大512x512にリサイズ
+    binary = np.array(image)
+    binary= cv2.bitwise_not(binary)  # 黒白反転
+
+    # 二値画像の前処理パターン1
+    binary1 = binary_image_processing(binary)
+    
+    # 二値画像をPNG形式で保存
+    edge_image = Image.fromarray(binary1)
+    img_io = io.BytesIO()
+    edge_image.save(img_io, 'PNG')
+    img_io.seek(0)
+     # 画像をbase64に変換
+    img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
+
+    # 元の画像をPNG形式で保存
+    image_io2 = io.BytesIO()
+    image2 = Image.fromarray(binary)
+    image2.save(image_io2, 'PNG')
+    image_io2.seek(0)
+    img_base642 = base64.b64encode(image_io2.getvalue()).decode('utf-8')
+
+    # JSONで楕円情報と画像データを返す
+    return jsonify({
+        "image1": img_base64,
+        "image2": img_base642
+    })
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -76,21 +130,6 @@ def upload_file():
     image = Image.open(filepath).convert('L')
     image.thumbnail((512, 512), Image.LANCZOS)  # 縦横比を保って最大512x512にリサイズ
     binary = np.array(image)
-    binary= cv2.bitwise_not(binary)  # 黒白反転
-
-    # メディアンフィルタでノイズ除去 (グレースケール画像に適用)
-    binary = cv2.medianBlur(binary, 3) # ksize=3
-    binary = cv2.Canny(binary, 50, 70)  # Cannyエッジ検出
-
-    # 局所的二値化（適応的閾値処理）
-    binary = cv2.adaptiveThreshold(
-        binary, # 前処理されたグレースケール画像が入力
-        255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY,
-        9,    # ブロックサイズ（奇数）
-        -5    # 定数C（調整可能）
-    )
     kernel = np.ones((3, 3), np.uint8)
     binary = cv2.dilate(binary, kernel, iterations=3)
     # 輪郭検出と楕円フィッティング

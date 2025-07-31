@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import ToHomeButton from './buttons/ToHomeButton';
-import ImageUpload from '../utils/imageUpload';
+import ImageUpload from './imageUpload';
 import { checkBackend, BackendStatus } from '../utils/checkBackend';
 
 function Update() {
@@ -20,7 +20,7 @@ function Update() {
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <h1 className="text-3xl font-bold mb-4">Update Page</h1>
-      <p className="text-lg">このページは更新のためのページです。</p>
+      <p className="text-lg">デッサン画像をアップロードしてください。</p>
       <ImageUpload />
       <ToHomeButton />
       <BackendStatus backendAlive={backendAlive} onCheck={handleCheckBackend} />
