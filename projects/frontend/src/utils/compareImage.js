@@ -13,6 +13,14 @@ function CompareImages({ imageUrl, imageUrl2, onJudge }) {
               alt="Uploaded1"
               className="mt-4 max-w-full h-auto rounded border"
             />
+            <div className="mt-2">
+              <button
+                onClick={() => onJudge(1)}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              >
+                画像1を選択
+              </button>
+            </div>
           </div>
         )}
         {imageUrl2 && (
@@ -23,16 +31,18 @@ function CompareImages({ imageUrl, imageUrl2, onJudge }) {
               alt="Uploaded2"
               className="mt-4 max-w-full h-auto rounded border"
             />
+            <div className="mt-2">
+              <button
+                onClick={() => onJudge(2)}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              >
+                画像2を選択
+              </button>
+            </div>
           </div>
         )}
       </div>
       <div className="flex-1 text-left overflow-x-auto max-h-96">
-        <button
-          onClick={onJudge}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition w-full"
-        >
-          誤りを判定する
-        </button>
       </div>
     </div>
   );

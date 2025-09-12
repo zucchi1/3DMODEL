@@ -48,10 +48,13 @@ function ImageUpload() {
     }
   };
 
-  const handleUpload2 = async () => {
-    const blob = base64ToBlob(imageUrl2);
+const handleUpload2 = async (selected) => {
+    // 選択された画像のURLとファイル名を決定
+    const base64 = selected === 1 ? imageUrl : imageUrl2;
+    const filename = selected === 1 ? 'image1.png' : 'image2.png';
+    const blob = base64ToBlob(base64);
     const formData = new FormData();
-    formData.append('file', blob, 'binary.png');
+    formData.append('file', blob, filename);
     setPhase(2); // 二値化後の状態に設定
 
     try {
@@ -65,13 +68,12 @@ function ImageUpload() {
       }
 
       const data = await response.json();
-      // 画像データ（base64）とJSON情報を取得
       setImageUrl(`data:image/png;base64,${data.image}`);
       setEllipseInfo(data.ellipses);
     } catch (error) {
       console.error('Error:', error);
     }
-  };
+};
 
   return (
     <div className="flex flex-col items-center space-y-4 p-4 bg-white rounded shadow-md w-full max-w-2xl">

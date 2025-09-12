@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ShowEllipseInfo({ ellipseInfo }, { imageUrl }) {
+function ShowEllipseInfo({ ellipseInfo, imageUrl }) {
   if (!ellipseInfo) return null;
   return (
     <div className="w-full flex flex-row space-x-4">
