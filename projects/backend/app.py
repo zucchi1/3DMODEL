@@ -19,25 +19,28 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 @app.route('/')
 def index():
     return 'Flask Server'
-
-def binary_image_processing(binary,kernel_size=3, threshold1=50, threshold2=70,
-                            adaptive_block_size=9, adaptive_C=-5):
-    """パラメータを指定して画像を二値化する"""
-    # メディアンフィルタでノイズ除去 (グレースケール画像に適用)
-    binary = cv2.medianBlur(binary, kernel_size) # ksize=3
-    binary = cv2.Canny(binary, threshold1, threshold2)  # Cannyエッジ検出
-
-    # 局所的二値化（適応的閾値処理）
+def binary_image_processing(binary, kernel_size=3,
+                           adaptive_block_size=51, adaptive_C=15):
+    # ノイズ除去
+    binary = cv2.GaussianBlur(binary, (3, 3), 0)
+    binary = cv2.medianBlur(binary, kernel_size)
     binary = cv2.adaptiveThreshold(
-        binary, # 前処理されたグレースケール画像が入力
-        255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY,
-        adaptive_block_size,    # ブロックサイズ（奇数）
-        adaptive_C    # 定数C（調整可能）
+    binary, 255,
+    cv2.ADAPTIVE_THRESH_MEAN_C,
+    cv2.THRESH_BINARY,
+    adaptive_block_size,
+    adaptive_C
     )
     return binary
-
+def remove_small_labels(binary, min_area=100):
+    # 0:背景, 1以降:ラベル
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary)
+    output = np.zeros_like(binary)
+    for i in range(1, num_labels):  # 0は背景なので除外
+        area = stats[i, cv2.CC_STAT_AREA]
+        if area >= min_area:
+            output[labels == i] = 255
+    return output
 
 
 def validate_and_save_file(file, upload_folder):
@@ -86,6 +89,7 @@ def detect_and_draw_ellipses(binary):
     draw_image_rgb = cv2.cvtColor(draw_image, cv2.COLOR_BGR2RGB)
     edge_image = Image.fromarray(draw_image_rgb)
     return edge_image, detected_ellipses
+
 @app.route('/binary', methods=['POST'])
 def binary_image():
     file = request.files.get('file')
@@ -93,63 +97,48 @@ def binary_image():
     if error:
         return error
     image = Image.open(filepath).convert('L')
-    image.thumbnail((512, 512), Image.LANCZOS)  # 縦横比を保って最大512x512にリサイズ
+    image.thumbnail((512, 512), Image.LANCZOS)
     binary = np.array(image)
-    binary= cv2.bitwise_not(binary)  # 黒白反転
+    binary = cv2.medianBlur(binary, 1)  # ノイズ除去
 
-    # 二値画像の前処理パターン1
-    binary1 = binary_image_processing(binary)
+    # 適応的閾値処理のパラメータを線画用に調整
+    binary1 = binary_image_processing(binary, kernel_size=3, 
+                                     adaptive_block_size=21,  # より小さく
+                                     adaptive_C=8)  # より大きく
+
+    # より優しいモルフォロジー処理（線の保持を重視）
+    kernel_small = np.ones((2, 2), np.uint8)  # より小さいカーネル
+    binary1 = cv2.morphologyEx(binary1, cv2.MORPH_CLOSE, kernel_small)  # CLOSEで線を接続
+
+    # 輪郭描画を避けて、連結成分による小さいノイズ除去
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary1)
+    cleaned = np.zeros_like(binary1)
     
-    # 二値画像をPNG形式で保存
+    for i in range(1, num_labels):  # 0は背景なので除外
+        area = stats[i, cv2.CC_STAT_AREA]
+        if area > 10:  # 小さすぎるノイズを除去
+            cleaned[labels == i] = 255
+    
+    binary1 = cleaned
+
+    # 必要なら黒白反転
+    binary1 = cv2.bitwise_not(binary1)
     edge_image = Image.fromarray(binary1)
     img_io = io.BytesIO()
     edge_image.save(img_io, 'PNG')
     img_io.seek(0)
-     # 画像をbase64に変換
     img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
 
-    # 元の画像をPNG形式で保存
+    # 画像2もbase64で返す
     image_io2 = io.BytesIO()
     image2 = Image.fromarray(binary)
     image2.save(image_io2, 'PNG')
     image_io2.seek(0)
     img_base642 = base64.b64encode(image_io2.getvalue()).decode('utf-8')
 
-    # JSONで楕円情報と画像データを返す
     return jsonify({
         "image1": img_base64,
         "image2": img_base642
-    })
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    file = request.files.get('file')
-    filepath, error = validate_and_save_file(file, app.config['UPLOAD_FOLDER'])
-    if error:
-        return error
-    image = Image.open(filepath).convert('L')
-    image.thumbnail((512, 512), Image.LANCZOS)  # 縦横比を保って最大512x512にリサイズ
-    binary = np.array(image)
-    kernel = np.ones((3, 3), np.uint8)
-    binary = cv2.dilate(binary, kernel, iterations=3)
-    # 輪郭検出と楕円フィッティング
-    edge_image, detected_ellipses = detect_and_draw_ellipses(binary)
-
-
-    img_io = io.BytesIO()
-
-    # 二値画像をPNG形式で保存を表示したい場合、以下のコメントアウトを外す
-    # edge_image = Image.fromarray(binary)
-    edge_image.save(img_io, 'PNG')
-
-    img_io.seek(0)
-     # 画像をbase64に変換
-    img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
-
-    # JSONで楕円情報と画像データを返す
-    return jsonify({
-        "ellipses": detected_ellipses,
-        "image": img_base64
     })
     
 @app.route('/reverse', methods=['POST'])
