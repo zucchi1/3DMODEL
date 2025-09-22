@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from flask import jsonify
 import os
-
+# 画像処理の関数群
 def binary_image_processing(binary, kernel_size=3, adaptive_block_size=51, adaptive_C=15):
     binary = cv2.GaussianBlur(binary, (3, 3), 0)
     binary = cv2.medianBlur(binary, kernel_size)

@@ -16,15 +16,19 @@ def upload_image():
     filepath, error = validate_and_save_file(file, upload_folder)
     if error:
         return error
+    
     image = Image.open(filepath).convert('L')
     image.thumbnail((512, 512), Image.LANCZOS)
     binary = np.array(image)
     binary = cv2.bitwise_not(binary)  # 白黒反転
+    
     edge_image, ellipses = detect_and_draw_ellipses(binary)
+    
     img_io = io.BytesIO()
     edge_image.save(img_io, 'PNG')
     img_io.seek(0)
     img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
+    
     return jsonify({
         "image": img_base64,
         "ellipses": ellipses
