@@ -1,11 +1,12 @@
 from flask import Blueprint, request, jsonify, current_app
 from PIL import Image
 import numpy as np
+import os
 import io
 import cv2
 import base64
-from utils.image_processing import validate_and_save_file
-from utils.ellipse import detect_and_draw_ellipses
+from utils.image_processing import validate_and_save_file, load_and_prepare_binary
+from utils.ellipse import detect_ellipses, label_and_draw_ellipses
 
 upload_bp = Blueprint('upload', __name__)
 
@@ -17,12 +18,12 @@ def upload_image():
     if error:
         return error
     
-    image = Image.open(filepath).convert('L')
-    image.thumbnail((512, 512), Image.LANCZOS)
-    binary = np.array(image)
-    binary = cv2.bitwise_not(binary)  # 白黒反転
-    
-    edge_image, ellipses = detect_and_draw_ellipses(binary)
+    binary = load_and_prepare_binary(filepath, invert=True)
+    save_dir = './static/binary_data'
+    os.makedirs(save_dir, exist_ok=True)
+    np.save(os.path.join(save_dir, 'binary.npy'), binary)
+    filtered_ellipses, h, w = detect_ellipses(binary)
+    edge_image, ellipses = label_and_draw_ellipses(binary, filtered_ellipses, h, w)
     
     img_io = io.BytesIO()
     edge_image.save(img_io, 'PNG')

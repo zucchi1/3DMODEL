@@ -4,7 +4,7 @@ import numpy as np
 import io
 import base64
 import cv2
-from utils.image_processing import binary_image_processing, validate_and_save_file
+from utils.image_processing import binary_image_processing, validate_and_save_file, load_and_prepare_binary
 
 binary_bp = Blueprint('binary', __name__)
 
@@ -15,9 +15,7 @@ def binary_image():
     filepath, error = validate_and_save_file(file, upload_folder)
     if error:
         return error
-    image = Image.open(filepath).convert('L')
-    image.thumbnail((512, 512), Image.LANCZOS)
-    binary = np.array(image)
+    binary = load_and_prepare_binary(filepath)
     binary = cv2.medianBlur(binary, 1)  # ノイズ除去
 
     # 適応的閾値処理のパラメータを線画用に調整

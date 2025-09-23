@@ -12,7 +12,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 # ルートの登録
 from routes.binary import binary_bp
 from routes.upload import upload_bp
-from routes.fixEllipse import fixEllipse_bp # 追加
+from routes.fixEllipse import fixEllipse_bp
 from routes.reverse import reverse_bp
 from routes.test import test_bp
 

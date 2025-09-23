@@ -1,7 +1,7 @@
 import React from 'react';
 import ToUpdateButton from '../components/buttons/ToUpdateButton'; 
 
-function ShowEllipseInfo({ ellipseInfo, imageUrl }) {
+function ShowEllipseInfo({ ellipseInfo, imageUrl, checkedEllipse, setCheckedEllipse, handleChecked }) {
     // 中心座標を「x: ..., y: ...」形式で返す関数
     const formatCenter = (center) => {
         if (Array.isArray(center) && center.length === 2) {
@@ -10,39 +10,6 @@ function ShowEllipseInfo({ ellipseInfo, imageUrl }) {
             return center.map((v, i) => `#${i}: ${typeof v === 'number' ? v.toFixed(2) : v}`).join(', ');
         }
         return center;
-    };
-    const [checkedEllipse, setCheckedEllipse] = React.useState([]);
-    const handleChecked = () => {
-        // チェックされた楕円についてcheckedEllipseに格納し、バックエンドに送信する処理をここに追加
-        const selectedEllipses = Object.entries(ellipseInfo).filter(([key, value]) => {
-            const checkbox = document.querySelector(`input[type="checkbox"][data-key="${key}"]`);
-            return checkbox && checkbox.checked;
-        });
-        setCheckedEllipse(selectedEllipses);
-        handleSendFixEllipse(selectedEllipses.map(([key, value]) => value));
-        console.log(selectedEllipses);
-
-    }
-    const handleSendFixEllipse = async (selectedEllipses) => {
-        try {
-            const response = await fetch('http://localhost:5000/fixEllipse', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ellipses: selectedEllipses }),
-            });
-
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            // 必要に応じてデータを処理
-            console.log('サーバーからの応答:', data);
-        } catch (error) {
-            console.error('Error:', error);
-        }
     };
   if (!ellipseInfo) return null;
   return (
@@ -76,7 +43,17 @@ function ShowEllipseInfo({ ellipseInfo, imageUrl }) {
                             return (
                             <tr key={key}>
                                 <td className="px-2 py-1 border">
-                                    <input type="checkbox" />
+                                    <input
+                                        type="checkbox"
+                                        checked={checkedEllipse.some(([k]) => k === key)}
+                                        onChange={e => {
+                                            if (e.target.checked) {
+                                                setCheckedEllipse(prev => [...prev, [key, value]]);
+                                            } else {
+                                                setCheckedEllipse(prev => prev.filter(([k]) => k !== key));
+                                            }
+                                        }}
+                                    />
                                 </td>
                                 <td className="px-2 py-1 border">{value.contour_index}</td>
                                 <td className="px-2 py-1 border">{center}</td>

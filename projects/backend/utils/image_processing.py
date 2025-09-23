@@ -40,3 +40,11 @@ def validate_and_save_file(file, upload_folder):
     filepath = os.path.join(upload_folder, file.filename)
     file.save(filepath)
     return filepath, None
+
+def load_and_prepare_binary(filepath, size=(512, 512), invert=False):
+    image = Image.open(filepath).convert('L')
+    image.thumbnail(size, Image.LANCZOS)
+    binary = np.array(image)
+    if invert:
+        binary = cv2.bitwise_not(binary)  # 白黒反転
+    return binary

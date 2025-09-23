@@ -75,6 +75,37 @@ const handleUpload2 = async (selected) => {
     }
 };
 
+// 楕円選択状態
+const [checkedEllipse, setCheckedEllipse] = useState([]);
+
+// 選択した楕円のみを表示ボタン押下時の処理
+const handleChecked = async () => {
+  // checkedEllipseは [key, value] の配列
+  const selectedEllipses = checkedEllipse.map(([key, value]) => value.contour_index);
+  const selectedInfos = Object.values(ellipseInfo).filter(
+    info => selectedEllipses.includes(info.contour_index)
+  );
+  try {
+    const response = await fetch('http://localhost:5000/fixEllipse', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ellipses: selectedInfos }),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    // 必要に応じてデータを処理
+    console.log('サーバーからの応答:', data);
+    // 例: 画像更新や楕円情報更新など
+    if (data.image) setImageUrl(`data:image/png;base64,${data.image}`);
+    //if (data.ellipses) setEllipseInfo(data.ellipses);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
   return (
     <div className="flex flex-col items-center space-y-4 p-4 bg-white rounded shadow-md w-full max-w-2xl">
       <div className="flex-1">
@@ -94,7 +125,13 @@ const handleUpload2 = async (selected) => {
         {phase === 1 ? (
           <CompareImages imageUrl={imageUrl} imageUrl2={imageUrl2} onJudge={handleUpload2} />
         ) : phase === 2 ? (
-            <ShowEllipseInfo ellipseInfo={ellipseInfo} imageUrl={imageUrl} />
+            <ShowEllipseInfo
+              ellipseInfo={ellipseInfo}
+              imageUrl={imageUrl}
+              checkedEllipse={checkedEllipse}
+              setCheckedEllipse={setCheckedEllipse}
+              handleChecked={handleChecked}
+            />
           ):(
           <div className="text-center text-gray-500">
             <p>無効な操作</p>
